@@ -6,6 +6,13 @@ public class Empresa {
 	private int cnpj_Emp;
 	private String nome_Emp;
 	
+	
+	public Empresa(int empresa, String endereco_Emp, int cnpj_Emp, String nome_Emp) {
+		this.empresa = empresa;
+		this.endereco_Emp = endereco_Emp;
+		this.cnpj_Emp = cnpj_Emp;
+		this.nome_Emp = nome_Emp;
+	}
 	public int getEmpresa() {
 		return empresa;
 	}
