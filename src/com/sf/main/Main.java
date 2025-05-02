@@ -4,6 +4,9 @@ import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 
+/*
+ * Classe principal, que faz as instâncias e cria a janela e relações
+ */
 public class Main extends JFrame{
 	
 	/**
@@ -26,6 +29,14 @@ public class Main extends JFrame{
 		setTitle("Sistema Financeiro");
 		setBounds(0,0,500,500);
 		setLayout(new FlowLayout());
+		
+		Menu menu = new Menu();
+		add(menu.cadastro);
+		add(menu.titulos);
+		add(menu.conciliacao);
+		add(menu.relatorios);
+		
+
 		setVisible(true);
 	}
 
