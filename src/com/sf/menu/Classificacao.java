@@ -1,4 +1,4 @@
-package com.sf.main;
+package com.sf.menu;
 /*
  * Classe responsável por criar o objeto Classificação
  */

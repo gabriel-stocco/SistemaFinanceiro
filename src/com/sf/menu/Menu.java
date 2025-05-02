@@ -1,4 +1,4 @@
-package com.sf.main;
+package com.sf.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

@@ -4,6 +4,8 @@ import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 
+import com.sf.menu.Menu;
+
 /*
  * Classe principal, que faz as instâncias e cria a janela e relações
  */
