@@ -1,41 +1,42 @@
 package com.sf.main;
 
+/*
+ * Classe responsável por criar o objeto empresa
+ */
 public class Empresa {
-	private int empresa;
-	private String endereco_Emp;
-	private int cnpj_Emp;
-	private String nome_Emp;
+	private int idEmpresa;
+	private String enderecoEmp;
+	private int cnpjEmp;
+	private String nomeEmp;
 	
 	
-	public Empresa(int empresa, String endereco_Emp, int cnpj_Emp, String nome_Emp) {
-		this.empresa = empresa;
-		this.endereco_Emp = endereco_Emp;
-		this.cnpj_Emp = cnpj_Emp;
-		this.nome_Emp = nome_Emp;
+	public Empresa(String endereco_Emp, int cnpj_Emp, String nome_Emp) {
+		this.idEmpresa = (Integer) null;
+		this.enderecoEmp = endereco_Emp;
+		this.cnpjEmp = cnpj_Emp;
+		this.nomeEmp = nome_Emp;
 	}
 	public int getEmpresa() {
-		return empresa;
+		return idEmpresa;
 	}
-	public void setEmpresa(int empresa) {
-		this.empresa = empresa;
-	}
+
 	public String getEndereco_Emp() {
-		return endereco_Emp;
+		return enderecoEmp;
 	}
 	public void setEndereco_Emp(String endereco_Emp) {
-		this.endereco_Emp = endereco_Emp;
+		this.enderecoEmp = endereco_Emp;
 	}
 	public int getCnpj_Emp() {
-		return cnpj_Emp;
+		return cnpjEmp;
 	}
 	public void setCnpj_Emp(int cnpj_Emp) {
-		this.cnpj_Emp = cnpj_Emp;
+		this.cnpjEmp = cnpj_Emp;
 	}
 	public String getNome_Emp() {
-		return nome_Emp;
+		return nomeEmp;
 	}
 	public void setNome_Emp(String nome_Emp) {
-		this.nome_Emp = nome_Emp;
+		this.nomeEmp = nome_Emp;
 	}
 	
 
