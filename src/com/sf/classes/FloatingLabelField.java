@@ -1,6 +1,7 @@
 package com.sf.classes;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
@@ -14,7 +15,7 @@ import javax.swing.Timer;
 
 @SuppressWarnings("serial")
 public class FloatingLabelField extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(200, 200, 200);
+	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JTextField field;
     private JLabel label;
 
@@ -27,6 +28,7 @@ public class FloatingLabelField extends JPanel {
         label.setFont(new Font("Segoe UI", Font.PLAIN, 22));
         label.setForeground(Color.WHITE);
         label.setBounds(0, 25, width, 30);
+        label.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
         field = new JTextField();
         field.setFont(new Font("Segoe UI", Font.PLAIN, 20));

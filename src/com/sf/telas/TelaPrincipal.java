@@ -37,7 +37,7 @@ public class TelaPrincipal extends JFrame {
 	private Container contentPane;
 	private static final Color COR_MENU = new Color(140, 140, 140);
 	private static final Color COR_HOVER = new Color(180, 180, 180);
-	private static final Color COR_CONTEUDO = new Color(200, 200, 200);
+	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	
 	public TelaPrincipal() {
 		super();
@@ -282,7 +282,7 @@ public class TelaPrincipal extends JFrame {
 
 	private JPanel criarCard(String titulo, String valor) {
 	    JPanel card = new JPanel();
-	    card.setBackground(new Color(173, 216, 230));
+	    card.setBackground(new Color(13, 33, 79));
 	    card.setLayout(new BorderLayout());
 	    card.setPreferredSize(new Dimension(450, 120));
 	    card.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 10));

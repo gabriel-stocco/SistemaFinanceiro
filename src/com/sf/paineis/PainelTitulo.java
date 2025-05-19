@@ -18,7 +18,7 @@ import javax.swing.border.Border;
 
 @SuppressWarnings("serial")
 public class PainelTitulo extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(200, 200, 200);
+	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private JButton jbImportar, jbTransferir, jbGerenciar, jbAdicionar;
 	
@@ -65,7 +65,7 @@ public class PainelTitulo extends JPanel {
 	
 	private JButton criarBotao(String titulo) {
 	    JButton card = new JButton();
-	    card.setBackground(new Color(144, 230, 144));
+	    card.setBackground(new Color(0, 100, 0));
 	    card.setLayout(new BorderLayout());
 	    card.setPreferredSize(new Dimension(420, 120));
 	    card.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 10));

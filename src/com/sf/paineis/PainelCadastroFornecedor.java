@@ -20,7 +20,7 @@ import com.sf.menu.Fornecedor;
 
 @SuppressWarnings("serial")
 public class PainelCadastroFornecedor extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(200, 200, 200);
+	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldEmail, fieldCnpj, fieldCep, fieldLogradouro, fieldBairro, fieldNumero, fieldCidade;
 	private JButton jbCadastrar;

@@ -6,12 +6,11 @@ package com.sf.menu;
 public class Empresa {
 	private int idEmpresa;
 	private String enderecoEmp;
-	private int cnpjEmp;
+	private String cnpjEmp;
 	private String nomeEmp;
 	
 	
-	public Empresa(String endereco_Emp, int cnpj_Emp, String nome_Emp) {
-		this.idEmpresa = (Integer) null;
+	public Empresa(String endereco_Emp, String cnpj_Emp, String nome_Emp) {
 		this.enderecoEmp = endereco_Emp;
 		this.cnpjEmp = cnpj_Emp;
 		this.nomeEmp = nome_Emp;
@@ -26,10 +25,10 @@ public class Empresa {
 	public void setEndereco_Emp(String endereco_Emp) {
 		this.enderecoEmp = endereco_Emp;
 	}
-	public int getCnpj_Emp() {
+	public String getCnpj_Emp() {
 		return cnpjEmp;
 	}
-	public void setCnpj_Emp(int cnpj_Emp) {
+	public void setCnpj_Emp(String cnpj_Emp) {
 		this.cnpjEmp = cnpj_Emp;
 	}
 	public String getNome_Emp() {
@@ -39,7 +38,10 @@ public class Empresa {
 		this.nomeEmp = nome_Emp;
 	}
 	
-
-	
+	@Override
+	public String toString() {
+		return "Empresa [idEmpresa=" + idEmpresa + ", enderecoEmp=" + enderecoEmp + ", cnpjEmp=" + cnpjEmp
+				+ ", nomeEmp=" + nomeEmp + "]";
+	}
 	
 }

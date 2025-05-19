@@ -20,7 +20,7 @@ import com.sf.menu.Classificacao;
 
 @SuppressWarnings("serial")
 public class PainelCadastroClassificacao extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(200, 200, 200);
+	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldCodigo, fieldNome;
 	private JButton jbCadastrar;

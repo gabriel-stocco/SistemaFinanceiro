@@ -11,7 +11,7 @@ import com.sf.classes.GraficoSimples;
 
 @SuppressWarnings("serial")
 public class PainelRelatorio extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(200, 200, 200);
+	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private GraficoSimples grafico;
 	

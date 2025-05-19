@@ -20,7 +20,7 @@ import com.sf.menu.Empresa;
 
 @SuppressWarnings("serial")
 public class PainelCadastroEmpresa extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(200, 200, 200);
+	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldNome, fieldCnpj, fieldCep, fieldLogradouro, fieldBairro, fieldNumero, fieldCidade;
 	private JButton jbCadastrar;
@@ -99,7 +99,8 @@ public class PainelCadastroEmpresa extends JPanel {
 					endereco = fieldLogradouro.getText() + " " + fieldNumero.getText() + " " + fieldBairro.getText()
 							+ " " + fieldCidade.getText();
 
-					empresa = new Empresa(endereco, Integer.parseInt(cnpj), nome);
+					empresa = new Empresa(endereco, cnpj, nome);
+					JOptionPane.showMessageDialog(null, empresa.toString());
 				} else {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Sistema Financeiro",
 							JOptionPane.ERROR_MESSAGE);
