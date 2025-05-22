@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.sf.bd.BDConsulta;
 import com.sf.classes.FloatingLabelField;
 import com.sf.menu.Classificacao;
 
@@ -25,7 +26,7 @@ public class PainelCadastroClassificacao extends JPanel {
 	private FloatingLabelField fieldCodigo, fieldNome;
 	private JButton jbCadastrar;
 	private Classificacao classificacao;
-
+	private BDConsulta bdConsulta = new BDConsulta();
 	public PainelCadastroClassificacao() {
 		super();
 		setLayout(null);
@@ -81,6 +82,10 @@ public class PainelCadastroClassificacao extends JPanel {
 					nome = fieldNome.getText();
 
 					classificacao = new Classificacao(nome);
+					bdConsulta.consulta(
+						    "INSERT INTO Classificacao(Id_Classificacao, Nome_Classificacao) values ("
+						    + codigo + ", '" + nome + "')");;
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Sistema Financeiro",
 							JOptionPane.ERROR_MESSAGE);

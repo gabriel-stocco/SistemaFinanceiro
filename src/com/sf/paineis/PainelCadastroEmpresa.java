@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.sf.bd.BDConsulta;
 import com.sf.classes.FloatingLabelField;
 import com.sf.menu.Empresa;
 
@@ -25,6 +26,7 @@ public class PainelCadastroEmpresa extends JPanel {
 	private FloatingLabelField fieldNome, fieldCnpj, fieldCep, fieldLogradouro, fieldBairro, fieldNumero, fieldCidade;
 	private JButton jbCadastrar;
 	private Empresa empresa;
+	private BDConsulta bdConsulta = new BDConsulta();
 
 	public PainelCadastroEmpresa() {
 		super();
@@ -101,6 +103,8 @@ public class PainelCadastroEmpresa extends JPanel {
 
 					empresa = new Empresa(endereco, cnpj, nome);
 					JOptionPane.showMessageDialog(null, empresa.toString());
+					bdConsulta.consulta("INSERT INTO Empresa(Nome_Empresa, CNPJ_Empresa, Endereco_Empresa) VALUES ('"
+						    + nome + "', '" + cnpj + "', '" + endereco + "')");
 				} else {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Sistema Financeiro",
 							JOptionPane.ERROR_MESSAGE);
