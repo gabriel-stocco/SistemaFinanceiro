@@ -8,8 +8,6 @@ public class Classificacao {
 
 
 	public Classificacao(String nomClassificacao) {
-
-		this.idClassificacao = (Integer) null;
 		this.nomClassificacao = nomClassificacao;
 	}
 

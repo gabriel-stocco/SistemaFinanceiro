@@ -11,8 +11,6 @@ public class ContaBancaria {
 	private String banco;
 	
 	public ContaBancaria(int idEmpresa, String agencia, int saldo, int numeroConta, String banco) {
-
-		this.idConta = (Integer) null;
 		this.idEmpresa = idEmpresa;
 		this.agencia = agencia;
 		this.saldo = saldo;

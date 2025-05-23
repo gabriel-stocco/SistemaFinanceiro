@@ -9,8 +9,6 @@ public class Fornecedor {
 	String emailForn;
 	
 	public Fornecedor(int cnjpForn, String enderecoForn, String emailForn) {
-
-		this.idFornecedor = (Integer) null;
 		this.cnjpForn = cnjpForn;
 		this.enderecoForn = enderecoForn;
 		this.emailForn = emailForn;
