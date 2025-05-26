@@ -1,4 +1,4 @@
-package com.sf.menu;
+package com.sf.model;
 /*
  * Classe responsável por criar o objeto Conta Bancaria
  */

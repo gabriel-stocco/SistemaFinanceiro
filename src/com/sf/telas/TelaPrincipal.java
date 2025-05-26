@@ -23,9 +23,9 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import com.sf.paineis.PainelCadastroClassificacao;
-import com.sf.paineis.PainelCadastroEmpresa;
-import com.sf.paineis.PainelCadastroFornecedor;
+import com.sf.paineis.PainelListarClassificacao;
+import com.sf.paineis.PainelListarEmpresa;
+import com.sf.paineis.PainelListarFornecedor;
 import com.sf.paineis.PainelRelatorio;
 import com.sf.paineis.PainelTitulo;
 
@@ -231,7 +231,7 @@ public class TelaPrincipal extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PainelCadastroClassificacao painel = new PainelCadastroClassificacao();
+				PainelListarClassificacao painel = new PainelListarClassificacao(TelaPrincipal.this);
 				trocarPainel(painel);
 			}
 		});
@@ -240,7 +240,7 @@ public class TelaPrincipal extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PainelCadastroEmpresa painel = new PainelCadastroEmpresa();
+				PainelListarEmpresa painel = new PainelListarEmpresa(TelaPrincipal.this);
 				trocarPainel(painel);
 			}
 		});
@@ -249,7 +249,7 @@ public class TelaPrincipal extends JFrame {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PainelCadastroFornecedor painel = new PainelCadastroFornecedor();
+				PainelListarFornecedor painel = new PainelListarFornecedor(TelaPrincipal.this);
 				trocarPainel(painel);
 			}
 		});
@@ -273,7 +273,7 @@ public class TelaPrincipal extends JFrame {
 		});
 	}
 	
-	private void trocarPainel(JPanel painelNovo) {
+	public void trocarPainel(JPanel painelNovo) {
 		painelConteudo.removeAll();
 		painelConteudo.add(painelNovo);
 		painelConteudo.revalidate();

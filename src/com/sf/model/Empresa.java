@@ -1,4 +1,4 @@
-package com.sf.menu;
+package com.sf.model;
 
 /*
  * Classe responsável por criar o objeto empresa
@@ -9,14 +9,23 @@ public class Empresa {
 	private String cnpjEmp;
 	private String nomeEmp;
 	
+	public Empresa() {
+		// TODO Auto-generated constructor stub
+	}
 	
-	public Empresa(String endereco_Emp, String cnpj_Emp, String nome_Emp) {
+	public Empresa(int id_empresa, String endereco_Emp, String cnpj_Emp, String nome_Emp) {
+		this.idEmpresa = id_empresa;
 		this.enderecoEmp = endereco_Emp;
 		this.cnpjEmp = cnpj_Emp;
 		this.nomeEmp = nome_Emp;
 	}
+
 	public int getEmpresa() {
 		return idEmpresa;
+	}
+	
+	public void setIdEmpresa(int idEmpresa) {
+		this.idEmpresa = idEmpresa;
 	}
 
 	public String getEndereco_Emp() {
@@ -36,12 +45,6 @@ public class Empresa {
 	}
 	public void setNome_Emp(String nome_Emp) {
 		this.nomeEmp = nome_Emp;
-	}
-	
-	@Override
-	public String toString() {
-		return "Empresa [idEmpresa=" + idEmpresa + ", enderecoEmp=" + enderecoEmp + ", cnpjEmp=" + cnpjEmp
-				+ ", nomeEmp=" + nomeEmp + "]";
 	}
 	
 }

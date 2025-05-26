@@ -26,40 +26,44 @@ public class BD implements Credentials{
 	/*
 	 * Método get connection que retorna o resultado da conexão
 	 */
-	public boolean getConnection() {
-		try {
+	public boolean getConnection(){
+		try{
 			Class.forName(DRIVER);
-			con = DriverManager.getConnection(URL, DRIVER, DATABASE);
-			System.out.println("Driver carregado ;)");
-		}catch(ClassNotFoundException e) {
-			System.out.println("Driver não encontrado");
-		}catch(SQLException sql) {
-			System.out.println(sql);
+			con = DriverManager.getConnection(URL,LOGIN,SENHA);
+			System.out.println("Conectou");
+			return true;
 		}
-		return false;
+		catch(ClassNotFoundException erro){
+			System.out.println(erro.toString());
+			return false;
+		}
+		catch(SQLException erro){
+				System.out.println(erro.toString());	
+			return false;
+		}
 	}
 	
 	/*
 	 * Método para encerrrar a conexão com o BD
 	 */
-	public void close() {
-		try {
-			if(st!=null) st.close();
-		}catch(SQLException sql) {
-			
+	public void close(){
+		try{
+           if(rs!=null)
+              rs.close();
 		}
-		
-		try {
-			if(rs!=null) rs.close();
-		}catch(SQLException sql) {
-			
+		catch(SQLException erro){}
+		try{
+           if(st!=null)
+			  st.close();
 		}
-		
-		try {
-			if(con!=null) con.close();
-		}catch(SQLException sql) {
-			
+		catch(SQLException erro){} 
+		try{
+			con.close();
+			System.out.println("Desconectou");
 		}
-	}
+		catch(SQLException erro){
+			System.out.println(erro.toString());
+		} 
+	}  
 	
 }

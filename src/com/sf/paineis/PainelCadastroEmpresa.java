@@ -15,21 +15,25 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import com.sf.bd.BDConsulta;
 import com.sf.classes.FloatingLabelField;
-import com.sf.menu.Empresa;
+import com.sf.model.Empresa;
+import com.sf.model.EmpresaDAO;
+import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelCadastroEmpresa extends JPanel {
 	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldNome, fieldCnpj, fieldCep, fieldLogradouro, fieldBairro, fieldNumero, fieldCidade;
-	private JButton jbCadastrar;
+	private JButton jbCadastrar, jbCancelar;
 	private Empresa empresa;
-	private BDConsulta bdConsulta = new BDConsulta();
+	private EmpresaDAO dao = new EmpresaDAO();
+	
+	private TelaPrincipal telaPrincipal;
 
-	public PainelCadastroEmpresa() {
+	public PainelCadastroEmpresa(TelaPrincipal telaPrincipal) {
 		super();
+		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
 		setBackground(COR_CONTEUDO);
 		iniciarComponentes();
@@ -44,18 +48,18 @@ public class PainelCadastroEmpresa extends JPanel {
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldNome = new FloatingLabelField("Nome da Empresa", 430);
-		fieldCnpj = new FloatingLabelField("CNPJ da Empresa", 430);
-		fieldCep = new FloatingLabelField("CEP", 300);
-		fieldLogradouro = new FloatingLabelField("Logradouro", 350);
-		fieldNumero = new FloatingLabelField("Número", 130);
-		fieldBairro = new FloatingLabelField("Bairro", 430);
-		fieldCidade = new FloatingLabelField("Cidade", 430);
+		fieldNome = new FloatingLabelField("Nome da Empresa", 430, null);
+		fieldCnpj = new FloatingLabelField("CNPJ da Empresa", 430, "##.###.###/####-##");
+		fieldCep = new FloatingLabelField("CEP", 300, "#####-##");
+		fieldLogradouro = new FloatingLabelField("Logradouro", 350, null);
+		fieldNumero = new FloatingLabelField("Número", 130, null);
+		fieldBairro = new FloatingLabelField("Bairro", 430, null);
+		fieldCidade = new FloatingLabelField("Cidade", 430, null);
 
 		// Botão do formulario
-		jbCadastrar = new JButton("Salvar");
-		jbCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 24));
-		jbCadastrar.setBackground(new Color(100, 100, 100));
+		jbCadastrar = new JButton("SALVAR");
+		jbCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 22));
+		jbCadastrar.setBackground(new Color(13, 33, 79));
 		jbCadastrar.setForeground(Color.WHITE);
 		jbCadastrar.setFocusPainted(false);
 		jbCadastrar.setBorderPainted(false);
@@ -63,6 +67,17 @@ public class PainelCadastroEmpresa extends JPanel {
 		jbCadastrar.setOpaque(true);
 		jbCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		jbCadastrar.setSize(150, 60);
+		
+		jbCancelar = new JButton("CANCELAR");
+		jbCancelar.setFont(new Font("Segoe UI", Font.PLAIN, 22));
+		jbCancelar.setBackground(Color.WHITE);
+		jbCancelar.setForeground(new Color(13, 33, 79));
+		jbCancelar.setFocusPainted(false);
+		jbCancelar.setBorderPainted(false);
+		jbCancelar.setContentAreaFilled(false);
+		jbCancelar.setOpaque(true);
+		jbCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		jbCancelar.setSize(150, 60);
 
 		// Adicionando ao Painel
 		add(jlTitulo);
@@ -74,6 +89,7 @@ public class PainelCadastroEmpresa extends JPanel {
 		add(fieldBairro);
 		add(fieldCidade);
 		add(jbCadastrar);
+		add(jbCancelar);
 
 		// Posicionamento
 		jlTitulo.setBounds(30, 20, 500, 30);
@@ -85,6 +101,7 @@ public class PainelCadastroEmpresa extends JPanel {
 		fieldBairro.setBounds(30, 270, 430, 80);
 		fieldCidade.setBounds(520, 270, 430, 80);
 		jbCadastrar.setBounds(800, 420, 150, 50);
+		jbCancelar.setBounds(620, 420, 150, 50);
 	}
 
 	private void criarEventos() {
@@ -92,31 +109,34 @@ public class PainelCadastroEmpresa extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nome, cnpj, endereco;
-				if (!fieldNome.getText().isEmpty() && !fieldCnpj.getText().isEmpty() && !fieldCep.getText().isEmpty()
+				String id, nome, cnpj, endereco;
+				if (!fieldNome.getText().isEmpty() && !fieldCnpj.isEmpty() && !fieldCep.isEmpty()
 						&& !fieldLogradouro.getText().isEmpty() && !fieldBairro.getText().isEmpty()
 						&& !fieldNumero.getText().isEmpty() && !fieldCidade.getText().isEmpty()) {
+					id = fieldNumero.getText();
 					nome = fieldNome.getText();
-					cnpj = fieldCnpj.getText();
+					cnpj = fieldCnpj.getText().replaceAll("[^\\d]", "");
 					endereco = fieldLogradouro.getText() + " " + fieldNumero.getText() + " " + fieldBairro.getText()
 							+ " " + fieldCidade.getText();
 
-					empresa = new Empresa(endereco, cnpj, nome);
-					JOptionPane.showMessageDialog(null, empresa.toString());
-					bdConsulta.consulta("INSERT INTO Empresa(Nome_Empresa, CNPJ_Empresa, Endereco_Empresa) VALUES ('"
-						    + nome + "', '" + cnpj + "', '" + endereco + "')");
+					empresa = new Empresa(Integer.parseInt(id), endereco, cnpj, nome);
+					
+					String res = dao.salvar(empresa);
+					
+					JOptionPane.showMessageDialog(null, res, "Sistema Financeiro",
+							JOptionPane.INFORMATION_MESSAGE);
+					
+					PainelListarEmpresa painelListar = new PainelListarEmpresa(telaPrincipal);
+					if (telaPrincipal != null) {
+						telaPrincipal.trocarPainel(painelListar);
+					} else {
+						JOptionPane.showMessageDialog(PainelCadastroEmpresa.this, "Erro: Tela principal não referenciada.");
+					}
+					
 				} else {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Sistema Financeiro",
 							JOptionPane.ERROR_MESSAGE);
 				}
-
-				fieldNome.setText("");
-				fieldCnpj.setText("");
-				fieldCep.setText("");
-				fieldLogradouro.setText("");
-				fieldBairro.setText("");
-				fieldNumero.setText("");
-				fieldCidade.setText("");
 			}
 		});
 
@@ -138,9 +158,48 @@ public class PainelCadastroEmpresa extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				jbCadastrar.setBorderPainted(true);
-				jbCadastrar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 3));
+				jbCadastrar.setBorder(BorderFactory.createLineBorder(Color.WHITE, 2));
 			}
 
+			@Override
+			public void mouseClicked(MouseEvent e) {
+			}
+		});
+		
+		jbCancelar.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				PainelListarEmpresa painelListar = new PainelListarEmpresa(telaPrincipal);
+				if (telaPrincipal != null) {
+					telaPrincipal.trocarPainel(painelListar);
+				} else {
+					JOptionPane.showMessageDialog(PainelCadastroEmpresa.this, "Erro: Tela principal não referenciada.");
+				}
+			}
+		});
+		
+		jbCancelar.addMouseListener(new MouseListener() {
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {
+			}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {
+			}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {
+				jbCancelar.setBorderPainted(false);
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				jbCancelar.setBorderPainted(true);
+				jbCancelar.setBorder(BorderFactory.createLineBorder(new Color(13, 33, 79), 2));
+			}
+			
 			@Override
 			public void mouseClicked(MouseEvent e) {
 			}

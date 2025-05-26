@@ -6,20 +6,28 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.text.ParseException;
 
 import javax.swing.BorderFactory;
+import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.Timer;
+import javax.swing.text.MaskFormatter;
+
 
 @SuppressWarnings("serial")
 public class FloatingLabelField extends JPanel {
 	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
-	private JTextField field;
+	private JFormattedTextField field;
     private JLabel label;
 
-    public FloatingLabelField(String texto, int width) {
+    /**
+     * @param texto Texto do label
+     * @param width Largura do campo
+     * @param fieldType Tipo de campo (TEXT, NUMERIC, MASK)
+     * @param mask Caso o tipo seja MASK, define a máscara (ex: "###.###.###-##")
+     */
+    public FloatingLabelField(String texto, int width, String mask) {
         setLayout(null);
         setBackground(COR_CONTEUDO);
         setPreferredSize(new Dimension(300, 60));
@@ -30,7 +38,7 @@ public class FloatingLabelField extends JPanel {
         label.setBounds(0, 25, width, 30);
         label.setCursor(new Cursor(Cursor.TEXT_CURSOR));
 
-        field = new JTextField();
+        field = createField(mask);
         field.setFont(new Font("Segoe UI", Font.PLAIN, 20));
         field.setForeground(Color.WHITE);
         field.setBackground(COR_CONTEUDO);
@@ -48,52 +56,35 @@ public class FloatingLabelField extends JPanel {
         field.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-            	animateLabelUp(width);
+            	int currentY = label.getY();
+            	label.setBounds(0, currentY - 20, width, 30);
                 field.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.WHITE));
+                repaint();
             }
 
             @Override
             public void focusLost(FocusEvent e) {
                 if (field.getText().isEmpty()) {
-                	 animateLabelDown(width);
+                	int currentY = label.getY();
+                	label.setBounds(0, currentY + 20, width, 30);
                 }
                 field.setBorder(BorderFactory.createMatteBorder(0, 0, 2, 0, Color.WHITE));
+                repaint();
             }
         });
     }
     
-    private void animateLabelUp(int width) {
-        Timer timer = new Timer(5, null);
-        final int endY = 0;
-        
-        timer.addActionListener(e -> {
-            int currentY = label.getY();
-            if (currentY <= endY) {
-                label.setBounds(0, endY, width, 30);
-                timer.stop();
-            } else {
-                label.setBounds(0, currentY - 2, width, 30);
-                repaint();
+    private JFormattedTextField createField(String mask) {
+        try {
+        	if (mask != null && !mask.isEmpty()) {
+        		MaskFormatter maskFormatter = new MaskFormatter(mask);
+                maskFormatter.setPlaceholderCharacter('_');
+                return new JFormattedTextField(maskFormatter);
             }
-        });
-        timer.start();
-    }
-
-    private void animateLabelDown(int width) {
-        Timer timer = new Timer(5, null);
-        final int endY = 25;
-        
-        timer.addActionListener(e -> {
-            int currentY = label.getY();
-            if (currentY >= endY) {
-                label.setBounds(0, endY, width, 30);
-                timer.stop();
-            } else {
-                label.setBounds(0, currentY + 2, width, 30);
-                repaint();
-            }
-        });
-        timer.start();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new JFormattedTextField();
     }
 
     public String getText() {
@@ -102,5 +93,9 @@ public class FloatingLabelField extends JPanel {
     
     public void setText(String texto) {
     	field.setText(texto);
+    }
+    
+    public boolean isEmpty() {
+        return getText().replaceAll("[^\\d]", "").isEmpty();
     }
 }

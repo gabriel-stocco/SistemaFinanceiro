@@ -1,4 +1,4 @@
-package com.sf.menu;
+package com.sf.model;
 /*
  * Classe responsável por estruturar o recebimento da Movimentação bancária via banco de dados
  */
@@ -12,13 +12,7 @@ public class MovimentacaoBancaria {
 	private String tipoMov;
 	private String dataMov;
 	
-	public MovimentacaoBancaria(String descMov,
-			int valorMov, String tipoMov, String dataMov) {
-
-		this.idMov = (Integer) null;
-		this.idClassificacao = (Integer) null;
-		this.idConta = (Integer) null;
-		this.idFornecedor = (Integer) null;
+	public MovimentacaoBancaria(String descMov, int valorMov, String tipoMov, String dataMov) {
 		this.descMov = descMov;
 		this.valorMov = valorMov;
 		this.tipoMov = tipoMov;
