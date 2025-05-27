@@ -1,5 +1,6 @@
 package com.sf.main;
 
+import com.sf.bd.BD;
 import com.sf.telas.TelaPrincipal;
 
 /*
@@ -13,6 +14,7 @@ public class Main {
 	public static void main(String args[]) {
 		TelaPrincipal tela = new TelaPrincipal();
 		tela.setVisible(true);
+
 	}
 
 }

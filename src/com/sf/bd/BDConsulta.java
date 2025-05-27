@@ -6,7 +6,6 @@ public class BDConsulta {
 	BD bd = new BD();
 	public void consulta(String query) {
 		if(bd.getConnection()) {
-
 			try {
 				bd.st = bd.con.prepareStatement(query);
 				bd.rs = bd.st.executeQuery();
