@@ -14,7 +14,7 @@ public class PainelRelatorio extends JPanel {
 	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private GraficoSimples grafico;
-	
+
 	public PainelRelatorio() {
 		super();
 		setLayout(null);
@@ -29,15 +29,15 @@ public class PainelRelatorio extends JPanel {
 		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		jlTitulo.setForeground(Color.WHITE);
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
+
 		grafico = new GraficoSimples();
-        grafico.setBounds(30, 70, 500, 300);
-        add(grafico);
-		
+		grafico.setBounds(30, 70, 500, 300);
+		add(grafico);
+
 		// Adicionando ao Painel
 		add(jlTitulo);
 		add(grafico);
-		
+
 		// Posicionamento
 		jlTitulo.setBounds(30, 20, 500, 30);
 		grafico.setBounds(30, 70, 480, 300);
@@ -45,6 +45,6 @@ public class PainelRelatorio extends JPanel {
 
 	private void criarEventos() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

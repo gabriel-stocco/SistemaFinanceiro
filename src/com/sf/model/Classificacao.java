@@ -1,4 +1,5 @@
 package com.sf.model;
+
 /*
  * Classe responsável por criar o objeto Classificação
  */
@@ -10,8 +11,7 @@ public class Classificacao {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Classificacao(int idClassificacao, String nomClassificacao) {
-		this.idClassificacao = idClassificacao;
+	public Classificacao(String nomClassificacao) {
 		this.nomClassificacao = nomClassificacao;
 	}
 
@@ -22,7 +22,7 @@ public class Classificacao {
 	public String getNomClassificacao() {
 		return nomClassificacao;
 	}
-	
+
 	public void setIdClassificacao(int idClassificacao) {
 		this.idClassificacao = idClassificacao;
 	}
@@ -30,5 +30,5 @@ public class Classificacao {
 	public void setNomClassificacao(String nomClassificacao) {
 		this.nomClassificacao = nomClassificacao;
 	}
-	
+
 }

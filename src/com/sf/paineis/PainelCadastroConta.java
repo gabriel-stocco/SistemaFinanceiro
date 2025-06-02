@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,23 +17,34 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.sf.classes.FloatingLabelComboBox;
 import com.sf.classes.FloatingLabelField;
-import com.sf.model.Classificacao;
-import com.sf.model.ClassificacaoDAO;
+import com.sf.model.Banco;
+import com.sf.model.BancoDAO;
+import com.sf.model.ContaBancaria;
+import com.sf.model.ContaDAO;
+import com.sf.model.Empresa;
+import com.sf.model.EmpresaDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
-public class PainelCadastroClassificacao extends JPanel {
+public class PainelCadastroConta extends JPanel {
 	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
-	private FloatingLabelField fieldNome;
+	private FloatingLabelField fieldAgencia, fieldNumeroConta, fieldSaldo;
+	private FloatingLabelComboBox<Banco> comboBanco;
+	private FloatingLabelComboBox<Empresa> comboEmpresa;
 	private JButton jbCadastrar, jbCancelar;
-	private ClassificacaoDAO dao = new ClassificacaoDAO();
-	private Classificacao classificacao;
+	private ContaBancaria conta;
+	private ContaDAO dao = new ContaDAO();
+	private List<Banco> bancos = new ArrayList<Banco>();
+	private BancoDAO bancoDAO = new BancoDAO();
+	private List<Empresa> empresas = new ArrayList<Empresa>();
+	private EmpresaDAO empresaDAO = new EmpresaDAO();
 
 	private TelaPrincipal telaPrincipal;
 
-	public PainelCadastroClassificacao(TelaPrincipal telaPrincipal) {
+	public PainelCadastroConta(TelaPrincipal telaPrincipal) {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
@@ -40,35 +53,63 @@ public class PainelCadastroClassificacao extends JPanel {
 		criarEventos();
 	}
 
-	public PainelCadastroClassificacao(TelaPrincipal telaPrincipal, Classificacao classificacao) {
+	public PainelCadastroConta(TelaPrincipal telaPrincipal, ContaBancaria conta) {
 		super();
 		this.telaPrincipal = telaPrincipal;
-		this.classificacao = classificacao;
+		this.conta = conta;
 		setLayout(null);
 		setBackground(COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 
-		if (classificacao != null) {
-			preencherCampos(classificacao);
-			jlTitulo.setText("EDITAR CLASSIFICAÇÃO");
+		if (conta != null) {
+			preencherCampos(conta);
+			jlTitulo.setText("EDITAR CONTA BANCÁRIA");
 			jbCadastrar.setText("ATUALIZAR");
 		}
 	}
 
-	private void preencherCampos(Classificacao classificacao) {
-		fieldNome.setText(classificacao.getNomClassificacao());
+	private void preencherCampos(ContaBancaria conta) {
+		fieldAgencia.setText(conta.getAgencia());
+		fieldNumeroConta.setText(conta.getNumeroConta());
+		fieldSaldo.setText(Float.toString(conta.getSaldo()));
+
+		for (Banco banco : bancos) {
+			if (banco.getIdBanco() == conta.getIdBanco()) {
+				comboBanco.setSelectedItem(banco);
+				break;
+			}
+		}
+
+		for (Empresa empresa : empresas) {
+			if (empresa.getEmpresa() == conta.getIdEmpresa()) {
+				comboEmpresa.setSelectedItem(empresa);
+				break;
+			}
+		}
 	}
 
 	private void iniciarComponentes() {
 		// Título do Painel
-		jlTitulo = new JLabel("ADICIONAR CLASSIFICAÇÃO");
+		jlTitulo = new JLabel("ADICIONAR CONTA BANCÁRIA");
 		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		jlTitulo.setForeground(Color.WHITE);
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldNome = new FloatingLabelField("Nome da Classificação", 920, null);
+		fieldAgencia = new FloatingLabelField("Agência", 263, null);
+		fieldNumeroConta = new FloatingLabelField("Número da Conta", 263, "########-#");
+		fieldSaldo = new FloatingLabelField("Saldo Atual", 265, null);
+
+		// Select de fornecedores
+		empresas = empresaDAO.listar();
+		comboEmpresa = new FloatingLabelComboBox<>("Empresa", 430);
+		comboEmpresa.setOptions(empresas, Empresa::getNome_Emp, Empresa::getEmpresa);
+
+		// Select de fornecedores
+		bancos = bancoDAO.listar();
+		comboBanco = new FloatingLabelComboBox<>("Banco", 430);
+		comboBanco.setOptions(bancos, Banco::getNomeBanco, Banco::getIdBanco);
 
 		// Botão do formulario
 		jbCadastrar = new JButton("SALVAR");
@@ -95,38 +136,58 @@ public class PainelCadastroClassificacao extends JPanel {
 
 		// Adicionando ao Painel
 		add(jlTitulo);
-		add(fieldNome);
+		add(fieldAgencia);
+		add(fieldNumeroConta);
+		add(fieldSaldo);
+		add(comboEmpresa);
+		add(comboBanco);
 		add(jbCadastrar);
 		add(jbCancelar);
 
 		// Posicionamento
 		jlTitulo.setBounds(30, 20, 500, 30);
-		fieldNome.setBounds(30, 70, 920, 80);
-		jbCadastrar.setBounds(800, 200, 150, 50);
-		jbCancelar.setBounds(620, 200, 150, 50);
+		fieldAgencia.setBounds(30, 70, 263, 80);
+		fieldNumeroConta.setBounds(353, 70, 263, 80);
+		fieldSaldo.setBounds(676, 70, 265, 80);
+		comboEmpresa.setBounds(30, 170, 430, 80);
+		comboBanco.setBounds(520, 170, 430, 80);
+		jbCadastrar.setBounds(800, 320, 150, 50);
+		jbCancelar.setBounds(620, 320, 150, 50);
 	}
 
 	private void criarEventos() {
 		jbCadastrar.addActionListener(new ActionListener() {
-			String nome;
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!fieldNome.getText().isEmpty()) {
-					nome = fieldNome.getText();
+				String agencia, numero;
+				int idEmpresa, idBanco;
+				float saldo;
+				if (!fieldAgencia.getText().isEmpty() && !fieldNumeroConta.isEmpty() && !fieldSaldo.getText().isEmpty()
+						&& !comboEmpresa.isEmpty() && !comboBanco.isEmpty()) {
+					agencia = fieldAgencia.getText();
+					numero = fieldNumeroConta.getText().replaceAll("[^\\d]", "");
+					saldo = Float.parseFloat(fieldSaldo.getText());
+					idEmpresa = (int) comboEmpresa.getSelectedValue();
+					idBanco = (int) comboBanco.getSelectedValue();
 
-					if (classificacao == null) {
-						classificacao = new Classificacao(nome);
-						String res = dao.salvar(classificacao);
+					if (conta == null) {
+						conta = new ContaBancaria(agencia, saldo, numero, idBanco, idEmpresa);
+						String res = dao.salvar(conta);
 						JOptionPane.showMessageDialog(null, res, "Sistema Financeiro", JOptionPane.INFORMATION_MESSAGE);
 					} else {
-						classificacao.setNomClassificacao(nome);
-						String res = dao.atualizar(classificacao);
+						conta.setAgencia(agencia);
+						conta.setNumeroConta(numero);
+						conta.setSaldo(saldo);
+						conta.setIdEmpresa(idEmpresa);
+						conta.setIdBanco(idBanco);
+
+						String res = dao.atualizar(conta);
 						JOptionPane.showMessageDialog(null, res, "Sistema Financeiro", JOptionPane.INFORMATION_MESSAGE);
 					}
 
-					PainelListarClassificacao painelCadastro = new PainelListarClassificacao(telaPrincipal);
-					telaPrincipal.trocarPainel(painelCadastro);
+					PainelListarContas painelListar = new PainelListarContas(telaPrincipal);
+					telaPrincipal.trocarPainel(painelListar);
 
 				} else {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Sistema Financeiro",
@@ -165,8 +226,8 @@ public class PainelCadastroClassificacao extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PainelListarClassificacao painelListagem = new PainelListarClassificacao(telaPrincipal);
-				telaPrincipal.trocarPainel(painelListagem);
+				PainelListarContas painelListar = new PainelListarContas(telaPrincipal);
+				telaPrincipal.trocarPainel(painelListar);
 			}
 		});
 

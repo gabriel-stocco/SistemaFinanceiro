@@ -25,11 +25,11 @@ public class PainelCadastroFornecedor extends JPanel {
 	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private static final Color COR_HOVER = new Color(200, 200, 200);
 	private JLabel jlTitulo;
-	private FloatingLabelField fieldEmail, fieldCnpj, fieldCep, fieldLogradouro, fieldBairro, fieldNumero, fieldCidade;
+	private FloatingLabelField fieldEmail, fieldCnpj, fieldLogradouro;
 	private JButton jbCadastrar, jbCancelar;
 	private FornecedorDAO dao = new FornecedorDAO();
 	private Fornecedor fornecedor;
-	
+
 	private TelaPrincipal telaPrincipal;
 
 	public PainelCadastroFornecedor(TelaPrincipal telaPrincipal) {
@@ -41,21 +41,39 @@ public class PainelCadastroFornecedor extends JPanel {
 		criarEventos();
 	}
 
+	public PainelCadastroFornecedor(TelaPrincipal telaPrincipal, Fornecedor fornecedor) {
+		super();
+		this.telaPrincipal = telaPrincipal;
+		this.fornecedor = fornecedor;
+		setLayout(null);
+		setBackground(COR_CONTEUDO);
+		iniciarComponentes();
+		criarEventos();
+
+		if (fornecedor != null) {
+			preencherCampos(fornecedor);
+			jlTitulo.setText("EDITAR FORNECEDOR");
+			jbCadastrar.setText("ATUALIZAR");
+		}
+	}
+
+	private void preencherCampos(Fornecedor fornecedor) {
+		fieldEmail.setText(fornecedor.getEmailForn());
+		fieldCnpj.setText(fornecedor.getCnjpForn());
+		fieldLogradouro.setText(fornecedor.getEnderecoForn());
+	}
+
 	private void iniciarComponentes() {
 		// Título do Painel
-		jlTitulo = new JLabel("CADASTRO FORNECEDORES");
+		jlTitulo = new JLabel("ADICIONAR FORNECEDOR");
 		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		jlTitulo.setForeground(Color.WHITE);
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldEmail = new FloatingLabelField("Código", 430, null);
+		fieldEmail = new FloatingLabelField("Email do Fornecedor", 430, null);
 		fieldCnpj = new FloatingLabelField("CNPJ do Fornecedor", 430, "##.###.###/####-##");
-		fieldCep = new FloatingLabelField("CEP", 300, "#####-##");
-		fieldLogradouro = new FloatingLabelField("Logradouro", 350, null);
-		fieldNumero = new FloatingLabelField("Número", 130, null);
-		fieldBairro = new FloatingLabelField("Bairro", 430, null);
-		fieldCidade = new FloatingLabelField("Cidade", 430, null);
+		fieldLogradouro = new FloatingLabelField("Endereço", 920, null);
 
 		// Botão do formulario
 		jbCadastrar = new JButton("SALVAR");
@@ -68,7 +86,7 @@ public class PainelCadastroFornecedor extends JPanel {
 		jbCadastrar.setOpaque(true);
 		jbCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		jbCadastrar.setSize(150, 60);
-		
+
 		jbCancelar = new JButton("CANCELAR");
 		jbCancelar.setFont(new Font("Segoe UI", Font.PLAIN, 22));
 		jbCancelar.setBackground(Color.WHITE);
@@ -84,11 +102,7 @@ public class PainelCadastroFornecedor extends JPanel {
 		add(jlTitulo);
 		add(fieldEmail);
 		add(fieldCnpj);
-		add(fieldCep);
 		add(fieldLogradouro);
-		add(fieldNumero);
-		add(fieldBairro);
-		add(fieldCidade);
 		add(jbCadastrar);
 		add(jbCancelar);
 
@@ -96,13 +110,9 @@ public class PainelCadastroFornecedor extends JPanel {
 		jlTitulo.setBounds(30, 20, 500, 30);
 		fieldEmail.setBounds(30, 70, 430, 80);
 		fieldCnpj.setBounds(520, 70, 430, 80);
-		fieldCep.setBounds(30, 170, 300, 80);
-		fieldLogradouro.setBounds(400, 170, 350, 80);
-		fieldNumero.setBounds(820, 170, 130, 80);
-		fieldBairro.setBounds(30, 270, 430, 80);
-		fieldCidade.setBounds(520, 270, 430, 80);
-		jbCadastrar.setBounds(800, 420, 150, 50);
-		jbCancelar.setBounds(620, 420, 150, 50);
+		fieldLogradouro.setBounds(30, 170, 920, 80);
+		jbCadastrar.setBounds(800, 320, 150, 50);
+		jbCancelar.setBounds(620, 320, 150, 50);
 	}
 
 	private void criarEventos() {
@@ -110,30 +120,27 @@ public class PainelCadastroFornecedor extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String cod, cnpj, endereco, idMov;
-				if (!fieldEmail.getText().isEmpty() && !fieldCnpj.isEmpty() && !fieldCep.isEmpty()
-						&& !fieldLogradouro.getText().isEmpty() && !fieldBairro.getText().isEmpty()
-						&& !fieldNumero.getText().isEmpty() && !fieldCidade.getText().isEmpty()) {
-					cod = fieldEmail.getText();
+				String cnpj, endereco, email;
+				if (!fieldEmail.getText().isEmpty() && !fieldCnpj.isEmpty() && !fieldLogradouro.getText().isEmpty()) {
 					cnpj = fieldCnpj.getText().replaceAll("[^\\d]", "");
-					endereco = fieldLogradouro.getText() + " " + fieldNumero.getText() + " " + fieldBairro.getText()
-							+ " " + fieldCidade.getText();
-					idMov = fieldNumero.getText();
+					endereco = fieldLogradouro.getText();
+					email = fieldEmail.getText();
 
-					fornecedor = new Fornecedor(Integer.parseInt(cod), cnpj, endereco, Integer.parseInt(idMov));
-					
-					String res = dao.salvar(fornecedor);
-					
-					JOptionPane.showMessageDialog(null, res, "Sistema Financeiro",
-							JOptionPane.INFORMATION_MESSAGE);
-					
-					PainelListarFornecedor painelListagem = new PainelListarFornecedor(telaPrincipal);
-					if (telaPrincipal != null) {
-						telaPrincipal.trocarPainel(painelListagem);
+					if (fornecedor == null) {
+						fornecedor = new Fornecedor(cnpj, endereco, email);
+						String res = dao.salvar(fornecedor);
+						JOptionPane.showMessageDialog(null, res, "Sistema Financeiro", JOptionPane.INFORMATION_MESSAGE);
 					} else {
-						JOptionPane.showMessageDialog(PainelCadastroFornecedor.this, "Erro: Tela principal não referenciada.");
+						fornecedor.setEmailForn(email);
+						fornecedor.setCnjpForn(cnpj);
+						fornecedor.setEnderecoForn(endereco);
+						String res = dao.atualizar(fornecedor);
+						JOptionPane.showMessageDialog(null, res, "Sistema Financeiro", JOptionPane.INFORMATION_MESSAGE);
 					}
-					
+
+					PainelListarFornecedor painelListagem = new PainelListarFornecedor(telaPrincipal);
+					telaPrincipal.trocarPainel(painelListagem);
+
 				} else {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Sistema Financeiro",
 							JOptionPane.ERROR_MESSAGE);
@@ -166,41 +173,37 @@ public class PainelCadastroFornecedor extends JPanel {
 			public void mouseClicked(MouseEvent e) {
 			}
 		});
-		
+
 		jbCancelar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				PainelListarFornecedor painelListagem = new PainelListarFornecedor(telaPrincipal);
-				if (telaPrincipal != null) {
-					telaPrincipal.trocarPainel(painelListagem);
-				} else {
-					JOptionPane.showMessageDialog(PainelCadastroFornecedor.this, "Erro: Tela principal não referenciada.");
-				}
+				telaPrincipal.trocarPainel(painelListagem);
 			}
 		});
-		
+
 		jbCancelar.addMouseListener(new MouseListener() {
-			
+
 			@Override
 			public void mouseReleased(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mousePressed(MouseEvent e) {
 			}
-			
+
 			@Override
 			public void mouseExited(MouseEvent e) {
 				jbCancelar.setBorderPainted(false);
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				jbCancelar.setBorderPainted(true);
 				jbCancelar.setBorder(BorderFactory.createLineBorder(new Color(13, 33, 79), 2));
 			}
-			
+
 			@Override
 			public void mouseClicked(MouseEvent e) {
 			}

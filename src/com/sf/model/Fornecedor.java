@@ -1,4 +1,5 @@
 package com.sf.model;
+
 /*
  * Classe responsável por criar o objeto Fornecedor
  */
@@ -7,23 +8,21 @@ public class Fornecedor {
 	private String cnjpForn;
 	private String enderecoForn;
 	private String emailForn;
-	private int idMov;
-	
+
 	public Fornecedor() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	public Fornecedor(int idForn, String cnjpForn, String enderecoForn, int idMov) {
-		this.idFornecedor = idForn;
+
+	public Fornecedor(String cnjpForn, String enderecoForn, String emailForn) {
 		this.cnjpForn = cnjpForn;
 		this.enderecoForn = enderecoForn;
-		this.idMov = idMov;
+		this.emailForn = emailForn;
 	}
 
 	public int getIdFornecedor() {
 		return idFornecedor;
 	}
-	
+
 	public void setIdForn(int idForn) {
 		this.idFornecedor = idForn;
 	}
@@ -52,12 +51,4 @@ public class Fornecedor {
 		this.emailForn = emailForn;
 	}
 
-	public int getIdMov() {
-		return idMov;
-	}
-
-	public void setIdMov(int idMov) {
-		this.idMov = idMov;
-	}
-	
 }

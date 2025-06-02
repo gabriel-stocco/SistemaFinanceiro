@@ -29,9 +29,9 @@ public class PainelListarClassificacao extends JPanel {
 	private JButton jbAdicionar;
 	private ClassificacaoDAO dao = new ClassificacaoDAO();
 	List<Classificacao> classificacao = new ArrayList<Classificacao>();
-	
+
 	private TelaPrincipal telaPrincipal;
-	
+
 	public PainelListarClassificacao(TelaPrincipal telaPrincipal) {
 		super();
 		this.telaPrincipal = telaPrincipal;
@@ -43,11 +43,11 @@ public class PainelListarClassificacao extends JPanel {
 
 	private void iniciarComponentes() {
 		// Título do Painel
-		jlTitulo = new JLabel("LISTAGEM CLASSIFICAÇÕES");
+		jlTitulo = new JLabel("LISTAR CLASSIFICAÇÕES");
 		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		jlTitulo.setForeground(Color.WHITE);
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
+
 		jbAdicionar = new JButton("ADICIONAR");
 		jbAdicionar.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		jbAdicionar.setBackground(new Color(13, 33, 79));
@@ -57,62 +57,62 @@ public class PainelListarClassificacao extends JPanel {
 		jbAdicionar.setContentAreaFilled(false);
 		jbAdicionar.setOpaque(true);
 		jbAdicionar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
+
 		// Colunas da tabela
 		LinkedHashMap<String, String> camposParaColunas = new LinkedHashMap<>();
 		camposParaColunas.put("idClassificacao", "Código");
 		camposParaColunas.put("nomClassificacao", "Nome");
-		
-		// DEFININDO AS AÇÕES DE EDITAR E EXCLUIR AQUI
-        Consumer<Classificacao> minhaAcaoEditar = (classificacao) -> {
-            JOptionPane.showMessageDialog(this, "Ação de EDITAR para: " + classificacao.getNomClassificacao() + " (ID: " + classificacao.getIdClassificacao() + ")");
-        };
 
-        Consumer<Classificacao> minhaAcaoExcluir = (classificacao) -> {
-            int confirm = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir: " + classificacao.getNomClassificacao() + "?", "Confirmação de Exclusão", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-            	String res =  dao.excluir(classificacao.getIdClassificacao());
-                JOptionPane.showMessageDialog(this, res); 
-                
-                if (res.contains("sucesso")) {
-                    carregarDadosTabela();	
-                }
-            }
-        };
-		
-		tabela = new TabelaModular<>(new ArrayList<>(), camposParaColunas, minhaAcaoEditar, minhaAcaoExcluir);
-		
+		// DEFININDO AS AÇÕES DE EDITAR E EXCLUIR AQUI
+		Consumer<Classificacao> minhaAcaoEditar = (classificacao) -> {
+			PainelCadastroClassificacao painelCadastro = new PainelCadastroClassificacao(telaPrincipal, classificacao);
+			telaPrincipal.trocarPainel(painelCadastro);
+		};
+
+		Consumer<Classificacao> minhaAcaoExcluir = (classificacao) -> {
+			int confirm = JOptionPane.showConfirmDialog(this,
+					"Tem certeza que deseja excluir: " + classificacao.getNomClassificacao() + "?",
+					"Confirmação de Exclusão", JOptionPane.YES_NO_OPTION);
+			if (confirm == JOptionPane.YES_OPTION) {
+				String res = dao.excluir(classificacao.getIdClassificacao());
+				JOptionPane.showMessageDialog(this, res);
+
+				if (res.contains("sucesso")) {
+					carregarDadosTabela();
+				}
+			}
+		};
+
+		tabela = new TabelaModular<>(new ArrayList<>(), camposParaColunas, minhaAcaoEditar, minhaAcaoExcluir, null,
+				null, true, true);
+
 		// Adicionando ao Painel
 		add(jlTitulo);
 		add(jbAdicionar);
 		add(tabela);
-		
+
 		// Posicionamento
 		jlTitulo.setBounds(30, 25, 500, 30);
 		jbAdicionar.setBounds(780, 20, 200, 50);
 		tabela.setBounds(30, 90, 950, 570);
-		
+
 		carregarDadosTabela();
 	}
-	
-	 private void carregarDadosTabela() {
-		 List<Classificacao> classificacoesAtualizadas = dao.listar();
-	     tabela.atualizarDados(classificacoesAtualizadas);
+
+	private void carregarDadosTabela() {
+		List<Classificacao> classificacoesAtualizadas = dao.listar();
+		tabela.atualizarDados(classificacoesAtualizadas);
 	}
 
 	private void criarEventos() {
 		jbAdicionar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				PainelCadastroClassificacao painelCadastro = new PainelCadastroClassificacao(telaPrincipal);
-				if (telaPrincipal != null) {
-					telaPrincipal.trocarPainel(painelCadastro);
-				} else {
-					JOptionPane.showMessageDialog(PainelListarClassificacao.this, "Erro: Tela principal não referenciada.");
-				}
+				telaPrincipal.trocarPainel(painelCadastro);
 			}
 		});
-		
+
 	}
 }

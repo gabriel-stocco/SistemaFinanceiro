@@ -12,216 +12,230 @@ import java.util.function.Consumer;
 
 @SuppressWarnings("serial")
 public class TabelaModular<T> extends JPanel {
-    private static final Color COR_CONTEUDO = new Color(180, 180, 180);
-    private final List<T> objetos;
-    private final LinkedHashMap<String, String> camposParaColunas;
-    private final Consumer<T> acaoEditar;
-    private final Consumer<T> acaoExcluir;
-    private JScrollPane scrollPane;
+	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
+	private final List<T> objetos;
+	private final LinkedHashMap<String, String> camposParaColunas;
+	private final Consumer<T> acaoEditar;
+	private final Consumer<T> acaoExcluir;
+	private final String nomeBotaoEditar;
+	private final String nomeBotaoExcluir;
+	private final boolean mostrarBotaoEditar;
+	private final boolean mostrarBotaoExcluir;
+	private JScrollPane scrollPane;
 
-    public TabelaModular(List<T> objetos, LinkedHashMap<String, String> camposParaColunas,
-                         Consumer<T> acaoEditar, Consumer<T> acaoExcluir) {
-        this.objetos = (objetos != null) ? new ArrayList<>(objetos) : new ArrayList<>();
-        this.camposParaColunas = camposParaColunas;
-        this.acaoEditar = acaoEditar;
-        this.acaoExcluir = acaoExcluir;
+	public TabelaModular(List<T> objetos, LinkedHashMap<String, String> camposParaColunas, Consumer<T> acaoEditar,
+			Consumer<T> acaoExcluir, String nomeBotaoEditar, String nomeBotaoExcluir, boolean mostrarBotaoEditar,
+			boolean mostrarBotaoExcluir) {
+		this.objetos = (objetos != null) ? new ArrayList<>(objetos) : new ArrayList<>();
+		this.camposParaColunas = camposParaColunas;
+		this.acaoEditar = acaoEditar;
+		this.acaoExcluir = acaoExcluir;
 
-        setLayout(new BorderLayout());
-        setBackground(COR_CONTEUDO);
+		this.nomeBotaoEditar = (nomeBotaoEditar == null || nomeBotaoEditar.trim().isEmpty()) ? "Editar"
+				: nomeBotaoEditar;
+		this.nomeBotaoExcluir = (nomeBotaoExcluir == null || nomeBotaoExcluir.trim().isEmpty()) ? "Excluir"
+				: nomeBotaoExcluir;
 
-        String[] colunas;
-        if (camposParaColunas == null || camposParaColunas.isEmpty()) {
-            colunas = new String[]{"Ações"};
-        } else {
-            colunas = new String[camposParaColunas.size() + 1];
-            int idx = 0;
-            for (String nome : camposParaColunas.values()) {
-                colunas[idx++] = nome;
-            }
-            colunas[idx] = "Ações";
-        }
+		this.mostrarBotaoEditar = mostrarBotaoEditar;
+		this.mostrarBotaoExcluir = mostrarBotaoExcluir;
 
+		setLayout(new BorderLayout());
+		setBackground(COR_CONTEUDO);
 
-        DefaultTableModel model = new DefaultTableModel(colunas, 0) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return column == getColumnCount() - 1;
-            }
-        };
-        
-        preencherModeloComObjetos(model, this.objetos);
+		String[] colunas;
+		if (camposParaColunas == null || camposParaColunas.isEmpty()) {
+			colunas = new String[] { "Ações" };
+		} else {
+			colunas = new String[camposParaColunas.size() + 1];
+			int idx = 0;
+			for (String nome : camposParaColunas.values()) {
+				colunas[idx++] = nome;
+			}
+			colunas[idx] = "Ações";
+		}
 
-        JTable tabela = new JTable(model);
-        tabela.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        tabela.setRowHeight(40);
-        tabela.setFocusable(false);
-        
-        tabela.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
-            @Override
-            public Component getTableCellRendererComponent(JTable table, Object value,
-                                                           boolean isSelected, boolean hasFocus, int row, int column) {
-                if (column == table.getColumn("Ações").getModelIndex()) {
-                    JPanel panel = criarPainelBotoesApenasVisual();
-                    panel.setBackground(Color.WHITE);
-                    return panel;
-                } else {
-                    Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-                    c.setBackground(Color.WHITE);
-                    return c;
-                }
-            }
-        });
+		DefaultTableModel model = new DefaultTableModel(colunas, 0) {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return column == getColumnCount() - 1;
+			}
+		};
 
-        if (tabela.getColumnCount() > 0 && tabela.getColumn("Ações") != null) {
-            tabela.getColumn("Ações").setCellEditor(new AcoesCellEditor());
-        }
+		preencherModeloComObjetos(model, this.objetos);
 
-        JTableHeader header = tabela.getTableHeader();
-        header.setBackground(new Color(13, 33, 79));
-        header.setForeground(Color.WHITE);
-        header.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        header.setPreferredSize(new Dimension(header.getWidth(), 35));
+		JTable tabela = new JTable(model);
+		tabela.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		tabela.setRowHeight(40);
+		tabela.setFocusable(false);
 
-        this.scrollPane = new JScrollPane(tabela);
-        this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        this.scrollPane.setBackground(COR_CONTEUDO);
-        this.scrollPane.getViewport().setBackground(COR_CONTEUDO);
+		tabela.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+			@Override
+			public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
+					boolean hasFocus, int row, int column) {
+				if (column == table.getColumn("Ações").getModelIndex()) {
+					JPanel panel = criarPainelBotoesApenasVisual();
+					panel.setBackground(Color.WHITE);
+					return panel;
+				} else {
+					Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+					c.setBackground(Color.WHITE);
+					return c;
+				}
+			}
+		});
 
-        add(this.scrollPane, BorderLayout.CENTER);
-    }
+		if (tabela.getColumnCount() > 0 && tabela.getColumn("Ações") != null) {
+			tabela.getColumn("Ações").setCellEditor(new AcoesCellEditor());
+		}
 
-    private void preencherModeloComObjetos(DefaultTableModel model, List<T> objetosParaPreencher) {
-        if (objetosParaPreencher == null || objetosParaPreencher.isEmpty()) {
-            return;
-        }
+		JTableHeader header = tabela.getTableHeader();
+		header.setBackground(new Color(13, 33, 79));
+		header.setForeground(Color.WHITE);
+		header.setFont(new Font("Segoe UI", Font.BOLD, 18));
+		header.setPreferredSize(new Dimension(header.getWidth(), 35));
 
-        for (T obj : objetosParaPreencher) {
-            Object[] linha = new Object[this.camposParaColunas.size() + 1];
-            int i = 0;
+		this.scrollPane = new JScrollPane(tabela);
+		this.scrollPane.setBorder(BorderFactory.createEmptyBorder());
+		this.scrollPane.setBackground(COR_CONTEUDO);
+		this.scrollPane.getViewport().setBackground(COR_CONTEUDO);
 
-            for (String nomeCampo : this.camposParaColunas.keySet()) {
-                try {
-                    Field campo = obj.getClass().getDeclaredField(nomeCampo);
-                    campo.setAccessible(true);
-                    linha[i] = campo.get(obj);
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    linha[i] = "Erro";
-                    System.err.println("Erro ao acessar campo " + nomeCampo + " para objeto " + obj.getClass().getSimpleName() + ": " + e.getMessage());
-                }
-                i++;
-            }
-            linha[i] = "Ações";
-            model.addRow(linha);
-        }
-    }
+		add(this.scrollPane, BorderLayout.CENTER);
+	}
 
-    public void atualizarDados(List<T> novosObjetos) {
-        this.objetos.clear();
-        if (novosObjetos != null) {
-            this.objetos.addAll(novosObjetos);
-        }
+	private void preencherModeloComObjetos(DefaultTableModel model, List<T> objetosParaPreencher) {
+		if (objetosParaPreencher == null || objetosParaPreencher.isEmpty()) {
+			return;
+		}
 
-        if (this.scrollPane != null && this.scrollPane.getViewport() != null && this.scrollPane.getViewport().getView() instanceof JTable) {
-            JTable table = (JTable) this.scrollPane.getViewport().getView();
-            DefaultTableModel model = (DefaultTableModel) table.getModel();
+		for (T obj : objetosParaPreencher) {
+			Object[] linha = new Object[this.camposParaColunas.size() + 1];
+			int i = 0;
 
-            if (table.getCellEditor() != null) {
-                table.getCellEditor().stopCellEditing();
-            }
+			for (String nomeCampo : this.camposParaColunas.keySet()) {
+				try {
+					Field campo = obj.getClass().getDeclaredField(nomeCampo);
+					campo.setAccessible(true);
+					linha[i] = campo.get(obj);
+				} catch (NoSuchFieldException | IllegalAccessException e) {
+					linha[i] = "Erro";
+					System.err.println("Erro ao acessar campo " + nomeCampo + " para objeto "
+							+ obj.getClass().getSimpleName() + ": " + e.getMessage());
+				}
+				i++;
+			}
+			linha[i] = "Ações";
+			model.addRow(linha);
+		}
+	}
 
-            model.setRowCount(0);
+	public void atualizarDados(List<T> novosObjetos) {
+		this.objetos.clear();
+		if (novosObjetos != null) {
+			this.objetos.addAll(novosObjetos);
+		}
 
-            preencherModeloComObjetos(model, this.objetos);
+		if (this.scrollPane != null && this.scrollPane.getViewport() != null
+				&& this.scrollPane.getViewport().getView() instanceof JTable) {
+			JTable table = (JTable) this.scrollPane.getViewport().getView();
+			DefaultTableModel model = (DefaultTableModel) table.getModel();
 
-            model.fireTableDataChanged();
-        } else {
-            System.err.println("Erro: JScrollPane ou JTable não inicializados corretamente em TabelaModular para atualizarDados.");
-        }
-    }
+			if (table.getCellEditor() != null) {
+				table.getCellEditor().stopCellEditing();
+			}
 
-    private JPanel criarPainelBotoesApenasVisual() {
-        JButton jbEditar = new JButton("Editar");
-        JButton jbExcluir = new JButton("Excluir");
+			model.setRowCount(0);
 
-        jbEditar.setFocusPainted(false);
-        jbExcluir.setFocusPainted(false);
+			preencherModeloComObjetos(model, this.objetos);
 
-        jbEditar.setBackground(new Color(14, 122, 13));
-        jbExcluir.setBackground(new Color(153, 0, 0));
+			model.fireTableDataChanged();
+		} else {
+			System.err.println(
+					"Erro: JScrollPane ou JTable não inicializados corretamente em TabelaModular para atualizarDados.");
+		}
+	}
 
-        jbEditar.setForeground(Color.WHITE);
-        jbExcluir.setForeground(Color.WHITE);
-        
-        jbEditar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        jbExcluir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	private JPanel criarPainelBotoesApenasVisual() {
+		JPanel painel = new JPanel(new GridBagLayout());
+		painel.setOpaque(true);
 
-        JPanel painel = new JPanel(new GridBagLayout());
-        painel.setOpaque(true);
-        
-        JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        botoes.setOpaque(false);
-        botoes.add(jbEditar);
-        botoes.add(jbExcluir);
-        painel.add(botoes);
-        return painel;
-    }
+		JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+		botoes.setOpaque(false);
 
-    class AcoesCellEditor extends AbstractCellEditor implements TableCellEditor {
-        private JPanel editorComponent;
-        private int currentRow;
-        private JTable currentTable;
+		if (mostrarBotaoEditar) {
+			JButton jbEditar = new JButton(nomeBotaoEditar);
+			jbEditar.setFocusPainted(false);
+			jbEditar.setBackground(new Color(14, 122, 13));
+			jbEditar.setForeground(Color.WHITE);
+			jbEditar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			botoes.add(jbEditar);
+		}
 
-        public AcoesCellEditor() {
-            editorComponent = new JPanel(new GridBagLayout());
-            editorComponent.setOpaque(true);
+		if (mostrarBotaoExcluir) {
+			JButton jbExcluir = new JButton(nomeBotaoExcluir);
+			jbExcluir.setFocusPainted(false);
+			jbExcluir.setBackground(new Color(153, 0, 0));
+			jbExcluir.setForeground(Color.WHITE);
+			jbExcluir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			botoes.add(jbExcluir);
+		}
 
-            JButton jbEditar = new JButton("Editar");
-            JButton jbExcluir = new JButton("Excluir");
+		painel.add(botoes);
+		return painel;
+	}
 
-            jbEditar.setFocusPainted(false);
-            jbExcluir.setFocusPainted(false);
+	class AcoesCellEditor extends AbstractCellEditor implements TableCellEditor {
+		private JPanel editorComponent;
+		private int currentRow;
 
-            jbEditar.setBackground(new Color(14, 122, 13));
-            jbExcluir.setBackground(new Color(153, 0, 0));
+		public AcoesCellEditor() {
+			editorComponent = new JPanel(new GridBagLayout());
+			editorComponent.setOpaque(true);
 
-            jbEditar.setForeground(Color.WHITE);
-            jbExcluir.setForeground(Color.WHITE);
-            
-            jbEditar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            jbExcluir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+			JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+			botoes.setOpaque(false);
 
-            jbEditar.addActionListener((ActionEvent e) -> {
-                T objeto = TabelaModular.this.objetos.get(currentRow);
-                acaoEditar.accept(objeto);
-                fireEditingStopped();
-            });
+			if (mostrarBotaoEditar) {
+				JButton jbEditar = new JButton(nomeBotaoEditar);
+				jbEditar.setFocusPainted(false);
+				jbEditar.setBackground(new Color(14, 122, 13));
+				jbEditar.setForeground(Color.WHITE);
+				jbEditar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				jbEditar.addActionListener((ActionEvent e) -> {
+					T objeto = TabelaModular.this.objetos.get(currentRow);
+					acaoEditar.accept(objeto);
+					fireEditingStopped();
+				});
+				botoes.add(jbEditar);
+			}
 
-            jbExcluir.addActionListener((ActionEvent e) -> {
-                T objeto = TabelaModular.this.objetos.get(currentRow);
-                acaoExcluir.accept(objeto);
-                fireEditingStopped();
-            });
+			if (mostrarBotaoExcluir) {
+				JButton jbExcluir = new JButton(nomeBotaoExcluir);
+				jbExcluir.setFocusPainted(false);
+				jbExcluir.setBackground(new Color(153, 0, 0));
+				jbExcluir.setForeground(Color.WHITE);
+				jbExcluir.setCursor(new Cursor(Cursor.HAND_CURSOR));
+				jbExcluir.addActionListener((ActionEvent e) -> {
+					T objeto = TabelaModular.this.objetos.get(currentRow);
+					acaoExcluir.accept(objeto);
+					fireEditingStopped();
+				});
+				botoes.add(jbExcluir);
+			}
 
-            JPanel botoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-            botoes.setOpaque(false);
-            botoes.add(jbEditar);
-            botoes.add(jbExcluir);
-            editorComponent.add(botoes);
-        }
+			editorComponent.add(botoes);
+		}
 
-        @Override
-        public Object getCellEditorValue() {
-            return null;
-        }
+		@Override
+		public Object getCellEditorValue() {
+			return null;
+		}
 
-        @Override
-        public Component getTableCellEditorComponent(JTable table, Object value,
-                                                     boolean isSelected, int row, int column) {
-            this.currentRow = row;
-            this.currentTable = table;
-            
-            editorComponent.setBackground(Color.WHITE);
-            return editorComponent;
-        }
-    }
+		@Override
+		public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row,
+				int column) {
+			this.currentRow = row;
+			editorComponent.setBackground(Color.WHITE);
+			return editorComponent;
+		}
+	}
 }

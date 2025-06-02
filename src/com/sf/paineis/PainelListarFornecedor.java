@@ -29,9 +29,9 @@ public class PainelListarFornecedor extends JPanel {
 	private JButton jbAdicionar;
 	private FornecedorDAO dao = new FornecedorDAO();
 	List<Fornecedor> fornecedor = new ArrayList<Fornecedor>();
-	
+
 	private TelaPrincipal telaPrincipal;
-	
+
 	public PainelListarFornecedor(TelaPrincipal telaPrincipal) {
 		super();
 		this.telaPrincipal = telaPrincipal;
@@ -43,11 +43,11 @@ public class PainelListarFornecedor extends JPanel {
 
 	private void iniciarComponentes() {
 		// Título do Painel
-		jlTitulo = new JLabel("LISTAGEM CLASSIFICAÇÕES");
+		jlTitulo = new JLabel("LISTAR FORNECEDORES");
 		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		jlTitulo.setForeground(Color.WHITE);
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
+
 		jbAdicionar = new JButton("ADICIONAR");
 		jbAdicionar.setFont(new Font("Segoe UI", Font.BOLD, 20));
 		jbAdicionar.setBackground(new Color(13, 33, 79));
@@ -57,63 +57,63 @@ public class PainelListarFornecedor extends JPanel {
 		jbAdicionar.setContentAreaFilled(false);
 		jbAdicionar.setOpaque(true);
 		jbAdicionar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		
+
 		// Colunas da tabela
 		LinkedHashMap<String, String> camposParaColunas = new LinkedHashMap<>();
 		camposParaColunas.put("idFornecedor", "Código");
+		camposParaColunas.put("emailForn", "E-mail");
 		camposParaColunas.put("cnjpForn", "CNPJ");
-		camposParaColunas.put("enderecoForn", "Endereço");
-		
-		// DEFININDO AS AÇÕES DE EDITAR E EXCLUIR AQUI
-        Consumer<Fornecedor> minhaAcaoEditar = (fornecedor) -> {
-            JOptionPane.showMessageDialog(this, "Ação de EDITAR para: " + fornecedor.getCnjpForn() + " (ID: " + fornecedor.getIdFornecedor() + ")");
-        };
 
-        Consumer<Fornecedor> minhaAcaoExcluir = (fornecedor) -> {
-            int confirm = JOptionPane.showConfirmDialog(this, "Tem certeza que deseja excluir: " + fornecedor.getCnjpForn() + "?", "Confirmação de Exclusão", JOptionPane.YES_NO_OPTION);
-            if (confirm == JOptionPane.YES_OPTION) {
-            	String res =  dao.excluir(fornecedor.getIdFornecedor());
-                JOptionPane.showMessageDialog(this, res); 
-                
-                if (res.contains("sucesso")) {
-                    carregarDadosTabela();	
-                }
-            }
-        };
-		
-		tabela = new TabelaModular<>(new ArrayList<>(), camposParaColunas, minhaAcaoEditar, minhaAcaoExcluir);
-		
+		// DEFININDO AS AÇÕES DE EDITAR E EXCLUIR AQUI
+		Consumer<Fornecedor> minhaAcaoEditar = (fornecedor) -> {
+			PainelCadastroFornecedor painelCadastro = new PainelCadastroFornecedor(telaPrincipal, fornecedor);
+			telaPrincipal.trocarPainel(painelCadastro);
+		};
+
+		Consumer<Fornecedor> minhaAcaoExcluir = (fornecedor) -> {
+			int confirm = JOptionPane.showConfirmDialog(this,
+					"Tem certeza que deseja excluir: " + fornecedor.getCnjpForn() + "?", "Confirmação de Exclusão",
+					JOptionPane.YES_NO_OPTION);
+			if (confirm == JOptionPane.YES_OPTION) {
+				String res = dao.excluir(fornecedor.getIdFornecedor());
+				JOptionPane.showMessageDialog(this, res);
+
+				if (res.contains("sucesso")) {
+					carregarDadosTabela();
+				}
+			}
+		};
+
+		tabela = new TabelaModular<>(new ArrayList<>(), camposParaColunas, minhaAcaoEditar, minhaAcaoExcluir, null,
+				null, true, true);
+
 		// Adicionando ao Painel
 		add(jlTitulo);
 		add(jbAdicionar);
 		add(tabela);
-		
+
 		// Posicionamento
 		jlTitulo.setBounds(30, 25, 500, 30);
 		jbAdicionar.setBounds(780, 20, 200, 50);
 		tabela.setBounds(30, 90, 950, 570);
-		
+
 		carregarDadosTabela();
 	}
-	
-	 private void carregarDadosTabela() {
-		 List<Fornecedor> fornecedoresAtualizados = dao.listar();
-	     tabela.atualizarDados(fornecedoresAtualizados);
+
+	private void carregarDadosTabela() {
+		List<Fornecedor> fornecedoresAtualizados = dao.listar();
+		tabela.atualizarDados(fornecedoresAtualizados);
 	}
 
 	private void criarEventos() {
 		jbAdicionar.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				PainelCadastroFornecedor painelCadastro = new PainelCadastroFornecedor(telaPrincipal);
-				if (telaPrincipal != null) {
-					telaPrincipal.trocarPainel(painelCadastro);
-				} else {
-					JOptionPane.showMessageDialog(PainelListarFornecedor.this, "Erro: Tela principal não referenciada.");
-				}
+				telaPrincipal.trocarPainel(painelCadastro);
 			}
 		});
-		
+
 	}
 }

@@ -1,61 +1,97 @@
 package com.sf.model;
+
+import java.sql.Date;
+
 /*
  * Classe responsável por estruturar o recebimento da Movimentação bancária via banco de dados
  */
 public class MovimentacaoBancaria {
 	private int idMov;
 	private int idClassificacao;
-	private int idConta;
-	private int idFornecedor;
+	private Object idConta;
+	private Object idFornecedor;
 	private String descMov;
-	private int valorMov;
+	private float valorMov;
 	private String tipoMov;
-	private String dataMov;
-	
-	public MovimentacaoBancaria(String descMov, int valorMov, String tipoMov, String dataMov) {
+	private Date dataMov;
+
+	public MovimentacaoBancaria() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public MovimentacaoBancaria(String descMov, float valorMov, String tipoMov, Date dataMov, int idClassificacao,
+			Object idConta, Object idForn) {
 		this.descMov = descMov;
 		this.valorMov = valorMov;
 		this.tipoMov = tipoMov;
 		this.dataMov = dataMov;
+		this.idClassificacao = idClassificacao;
+		this.idConta = idConta;
+		this.idFornecedor = idForn;
 	}
+
 	public int getIdMov() {
 		return idMov;
+	}
+
+	public void setIdMov(int idMov) {
+		this.idMov = idMov;
 	}
 
 	public int getIdClassificacao() {
 		return idClassificacao;
 	}
 
-	public int getIdConta() {
+	public void setIdClassificacao(int idClassificacao) {
+		this.idClassificacao = idClassificacao;
+	}
+
+	public Object getIdConta() {
 		return idConta;
 	}
 
-	public int getIdFornecedor() {
+	public void setIdConta(Object idConta) {
+		this.idConta = idConta;
+	}
+
+	public Object getIdFornecedor() {
 		return idFornecedor;
+	}
+
+	public void setIdFornecedor(Object idFornecedor) {
+		this.idFornecedor = idFornecedor;
 	}
 
 	public String getDescMov() {
 		return descMov;
 	}
+
 	public void setDescMov(String descMov) {
 		this.descMov = descMov;
 	}
-	public int getValorMov() {
+
+	public float getValorMov() {
 		return valorMov;
 	}
-	public void setValorMov(int valorMov) {
+
+	public void setValorMov(float valorMov) {
 		this.valorMov = valorMov;
 	}
+
 	public String getTipoMov() {
 		return tipoMov;
 	}
+
 	public void setTipoMov(String tipoMov) {
 		this.tipoMov = tipoMov;
 	}
-	public String getDataMov() {
+
+	public Date getDataMov() {
 		return dataMov;
 	}
-	public void setDataMov(String dataMov) {
+
+	public void setDataMov(Date dataMov) {
 		this.dataMov = dataMov;
 	}
+
 }

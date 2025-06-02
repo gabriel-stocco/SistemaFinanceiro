@@ -8,6 +8,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -15,23 +17,29 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import com.sf.classes.FloatingLabelComboBox;
 import com.sf.classes.FloatingLabelField;
 import com.sf.model.Classificacao;
 import com.sf.model.ClassificacaoDAO;
+import com.sf.model.MovimentacaoBancaria;
+import com.sf.model.MovimentacaoBancariaDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
-public class PainelCadastroClassificacao extends JPanel {
+public class PainelCadastroClassificar extends JPanel {
 	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
-	private FloatingLabelField fieldNome;
+	private FloatingLabelField fieldDesc;
 	private JButton jbCadastrar, jbCancelar;
-	private ClassificacaoDAO dao = new ClassificacaoDAO();
-	private Classificacao classificacao;
+	private FloatingLabelComboBox<Classificacao> comboClassificacao;
+	private MovimentacaoBancariaDAO dao = new MovimentacaoBancariaDAO();
+	private MovimentacaoBancaria movimentacao;
+	private ClassificacaoDAO classiDAO = new ClassificacaoDAO();
+	private List<Classificacao> classificacoes = new ArrayList<Classificacao>();
 
 	private TelaPrincipal telaPrincipal;
 
-	public PainelCadastroClassificacao(TelaPrincipal telaPrincipal) {
+	public PainelCadastroClassificar(TelaPrincipal telaPrincipal) {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
@@ -40,38 +48,44 @@ public class PainelCadastroClassificacao extends JPanel {
 		criarEventos();
 	}
 
-	public PainelCadastroClassificacao(TelaPrincipal telaPrincipal, Classificacao classificacao) {
+	public PainelCadastroClassificar(TelaPrincipal telaPrincipal, MovimentacaoBancaria movimentacao) {
 		super();
 		this.telaPrincipal = telaPrincipal;
-		this.classificacao = classificacao;
+		this.movimentacao = movimentacao;
 		setLayout(null);
 		setBackground(COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 
-		if (classificacao != null) {
-			preencherCampos(classificacao);
-			jlTitulo.setText("EDITAR CLASSIFICAÇÃO");
-			jbCadastrar.setText("ATUALIZAR");
+		if (movimentacao != null) {
+			preencherCampos(movimentacao);
+			jlTitulo.setText("CLASSIFICAR MOVIMENTAÇÃO");
+			jbCadastrar.setText("CLASSIFICAR");
 		}
 	}
 
-	private void preencherCampos(Classificacao classificacao) {
-		fieldNome.setText(classificacao.getNomClassificacao());
+	private void preencherCampos(MovimentacaoBancaria movimentacao) {
+		fieldDesc.setText(movimentacao.getDescMov());
 	}
 
 	private void iniciarComponentes() {
 		// Título do Painel
-		jlTitulo = new JLabel("ADICIONAR CLASSIFICAÇÃO");
+		jlTitulo = new JLabel();
 		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		jlTitulo.setForeground(Color.WHITE);
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldNome = new FloatingLabelField("Nome da Classificação", 920, null);
+		fieldDesc = new FloatingLabelField("Descrição", 540, null);
+
+		// Select de classificacao
+		classificacoes = classiDAO.listar();
+		comboClassificacao = new FloatingLabelComboBox<>("Classificação", 330);
+		comboClassificacao.setOptions(classificacoes, Classificacao::getNomClassificacao,
+				Classificacao::getIdClassificacao);
 
 		// Botão do formulario
-		jbCadastrar = new JButton("SALVAR");
+		jbCadastrar = new JButton();
 		jbCadastrar.setFont(new Font("Segoe UI", Font.PLAIN, 22));
 		jbCadastrar.setBackground(new Color(13, 33, 79));
 		jbCadastrar.setForeground(Color.WHITE);
@@ -95,38 +109,37 @@ public class PainelCadastroClassificacao extends JPanel {
 
 		// Adicionando ao Painel
 		add(jlTitulo);
-		add(fieldNome);
+		add(fieldDesc);
+		add(comboClassificacao);
 		add(jbCadastrar);
 		add(jbCancelar);
 
 		// Posicionamento
 		jlTitulo.setBounds(30, 20, 500, 30);
-		fieldNome.setBounds(30, 70, 920, 80);
-		jbCadastrar.setBounds(800, 200, 150, 50);
-		jbCancelar.setBounds(620, 200, 150, 50);
+		fieldDesc.setBounds(30, 70, 540, 80);
+		comboClassificacao.setBounds(620, 70, 330, 80);
+		jbCadastrar.setBounds(770, 200, 180, 50);
+		jbCancelar.setBounds(590, 200, 150, 50);
 	}
 
 	private void criarEventos() {
 		jbCadastrar.addActionListener(new ActionListener() {
-			String nome;
+			String desc;
+			int idClassificacao;
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (!fieldNome.getText().isEmpty()) {
-					nome = fieldNome.getText();
+				if (!fieldDesc.getText().isEmpty()) {
+					desc = fieldDesc.getText();
+					idClassificacao = (int) comboClassificacao.getSelectedValue();
 
-					if (classificacao == null) {
-						classificacao = new Classificacao(nome);
-						String res = dao.salvar(classificacao);
-						JOptionPane.showMessageDialog(null, res, "Sistema Financeiro", JOptionPane.INFORMATION_MESSAGE);
-					} else {
-						classificacao.setNomClassificacao(nome);
-						String res = dao.atualizar(classificacao);
-						JOptionPane.showMessageDialog(null, res, "Sistema Financeiro", JOptionPane.INFORMATION_MESSAGE);
-					}
+					movimentacao.setDescMov(desc);
+					movimentacao.setIdClassificacao(idClassificacao);
+					String res = dao.classificar(movimentacao);
+					JOptionPane.showMessageDialog(null, res, "Sistema Financeiro", JOptionPane.INFORMATION_MESSAGE);
 
-					PainelListarClassificacao painelCadastro = new PainelListarClassificacao(telaPrincipal);
-					telaPrincipal.trocarPainel(painelCadastro);
+					PainelClassificar painelClassificar = new PainelClassificar(telaPrincipal);
+					telaPrincipal.trocarPainel(painelClassificar);
 
 				} else {
 					JOptionPane.showMessageDialog(null, "Preencha todos os campos", "Sistema Financeiro",
@@ -165,7 +178,7 @@ public class PainelCadastroClassificacao extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PainelListarClassificacao painelListagem = new PainelListarClassificacao(telaPrincipal);
+				PainelClassificar painelListagem = new PainelClassificar(telaPrincipal);
 				telaPrincipal.trocarPainel(painelListagem);
 			}
 		});

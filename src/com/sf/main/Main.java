@@ -1,13 +1,12 @@
 package com.sf.main;
 
-import com.sf.bd.BD;
 import com.sf.telas.TelaPrincipal;
 
 /*
  * Classe principal, que faz as instâncias e cria a janela
  */
 public class Main {
-		
+
 	/*
 	 * Função principal que instancia a classe e abre a janela
 	 */

@@ -17,22 +17,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.sf.classes.TabelaModular;
-import com.sf.model.Empresa;
-import com.sf.model.EmpresaDAO;
+import com.sf.model.ContaBancaria;
+import com.sf.model.ContaDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
-public class PainelListarEmpresa extends JPanel {
+public class PainelListarContas extends JPanel {
 	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
-	private TabelaModular<Empresa> tabela;
+	private TabelaModular<ContaBancaria> tabela;
 	private JLabel jlTitulo;
 	private JButton jbAdicionar;
-	private EmpresaDAO dao = new EmpresaDAO();
-	List<Empresa> empresas = new ArrayList<Empresa>();
+	private ContaDAO dao = new ContaDAO();
+	List<ContaBancaria> contas = new ArrayList<ContaBancaria>();
 
 	private TelaPrincipal telaPrincipal;
 
-	public PainelListarEmpresa(TelaPrincipal telaPrincipal) {
+	public PainelListarContas(TelaPrincipal telaPrincipal) {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
@@ -43,7 +43,7 @@ public class PainelListarEmpresa extends JPanel {
 
 	private void iniciarComponentes() {
 		// Título do Painel
-		jlTitulo = new JLabel("LISTAR EMPRESAS");
+		jlTitulo = new JLabel("LISTAR CONTAS BANCÁRIAS");
 		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		jlTitulo.setForeground(Color.WHITE);
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -60,22 +60,22 @@ public class PainelListarEmpresa extends JPanel {
 
 		// Colunas da tabela
 		LinkedHashMap<String, String> camposParaColunas = new LinkedHashMap<>();
-		camposParaColunas.put("idEmpresa", "Código");
-		camposParaColunas.put("nomeEmp", "Nome");
-		camposParaColunas.put("cnpjEmp", "CNPJ");
+		camposParaColunas.put("agencia", "Agência");
+		camposParaColunas.put("numeroConta", "Número da Conta");
+		camposParaColunas.put("nomeEmpresa", "Empresa");
 
 		// DEFININDO AS AÇÕES DE EDITAR E EXCLUIR AQUI
-		Consumer<Empresa> minhaAcaoEditar = (empresa) -> {
-			PainelCadastroEmpresa painelCadastro = new PainelCadastroEmpresa(telaPrincipal, empresa);
+		Consumer<ContaBancaria> minhaAcaoEditar = (conta) -> {
+			PainelCadastroConta painelCadastro = new PainelCadastroConta(telaPrincipal, conta);
 			telaPrincipal.trocarPainel(painelCadastro);
 		};
 
-		Consumer<Empresa> minhaAcaoExcluir = (empresa) -> {
+		Consumer<ContaBancaria> minhaAcaoExcluir = (conta) -> {
 			int confirm = JOptionPane.showConfirmDialog(this,
-					"Tem certeza que deseja excluir: " + empresa.getNome_Emp() + "?", "Confirmação de Exclusão",
+					"Tem certeza que deseja excluir: " + conta.getNomeEmpresa() + "?", "Confirmação de Exclusão",
 					JOptionPane.YES_NO_OPTION);
 			if (confirm == JOptionPane.YES_OPTION) {
-				String res = dao.excluir(empresa.getEmpresa());
+				String res = dao.excluir(conta.getIdConta());
 				JOptionPane.showMessageDialog(this, res);
 
 				if (res.contains("sucesso")) {
@@ -101,8 +101,8 @@ public class PainelListarEmpresa extends JPanel {
 	}
 
 	private void carregarDadosTabela() {
-		List<Empresa> empresasAtualizadas = dao.listar();
-		tabela.atualizarDados(empresasAtualizadas);
+		List<ContaBancaria> contasAtualizadas = dao.listarComEmpresa();
+		tabela.atualizarDados(contasAtualizadas);
 	}
 
 	private void criarEventos() {
@@ -110,12 +110,8 @@ public class PainelListarEmpresa extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				PainelCadastroEmpresa painelCadastro = new PainelCadastroEmpresa(telaPrincipal);
-				if (telaPrincipal != null) {
-					telaPrincipal.trocarPainel(painelCadastro);
-				} else {
-					JOptionPane.showMessageDialog(PainelListarEmpresa.this, "Erro: Tela principal não referenciada.");
-				}
+				PainelCadastroConta painelCadastro = new PainelCadastroConta(telaPrincipal);
+				telaPrincipal.trocarPainel(painelCadastro);
 			}
 		});
 

@@ -1,25 +1,35 @@
 package com.sf.model;
+
 /*
  * Classe responsável por criar o objeto Conta Bancaria
  */
 public class ContaBancaria {
 	private int idConta;
 	private int idEmpresa;
+	private int idBanco;
 	private String agencia;
-	private int saldo;
-	private int numeroConta;
-	private String banco;
-	
-	public ContaBancaria(int idEmpresa, String agencia, int saldo, int numeroConta, String banco) {
-		this.idEmpresa = idEmpresa;
+	private float saldo;
+	private String numeroConta;
+	private String nomeEmpresa;
+
+	public ContaBancaria() {
+		// TODO Auto-generated constructor stub
+	}
+
+	public ContaBancaria(String agencia, float saldo, String numeroConta, int idBanco, int idEmpresa) {
 		this.agencia = agencia;
 		this.saldo = saldo;
 		this.numeroConta = numeroConta;
-		this.banco = banco;
+		this.idBanco = idBanco;
+		this.idEmpresa = idEmpresa;
 	}
 
 	public int getIdConta() {
 		return idConta;
+	}
+
+	public void setIdConta(int idConta) {
+		this.idConta = idConta;
 	}
 
 	public int getIdEmpresa() {
@@ -30,6 +40,14 @@ public class ContaBancaria {
 		this.idEmpresa = idEmpresa;
 	}
 
+	public int getIdBanco() {
+		return idBanco;
+	}
+
+	public void setIdBanco(int idBanco) {
+		this.idBanco = idBanco;
+	}
+
 	public String getAgencia() {
 		return agencia;
 	}
@@ -38,27 +56,28 @@ public class ContaBancaria {
 		this.agencia = agencia;
 	}
 
-	public int getSaldo() {
+	public float getSaldo() {
 		return saldo;
 	}
 
-	public void setSaldo(int saldo) {
+	public void setSaldo(float saldo) {
 		this.saldo = saldo;
 	}
 
-	public int getNumeroConta() {
+	public String getNumeroConta() {
 		return numeroConta;
 	}
 
-	public void setNumeroConta(int numeroConta) {
+	public void setNumeroConta(String numeroConta) {
 		this.numeroConta = numeroConta;
 	}
 
-	public String getBanco() {
-		return banco;
+	public String getNomeEmpresa() {
+		return nomeEmpresa;
 	}
 
-	public void setBanco(String banco) {
-		this.banco = banco;
+	public void setNomeEmpresa(String nomeEmpresa) {
+		this.nomeEmpresa = nomeEmpresa;
 	}
+
 }
