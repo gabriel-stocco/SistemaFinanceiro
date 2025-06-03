@@ -62,6 +62,13 @@ public class MovimentacaoBancaria {
 		this.idFornecedor = idFornecedor;
 	}
 
+	@Override
+	public String toString() {
+		return "MovimentacaoBancaria [idMov=" + idMov + ", idClassificacao=" + idClassificacao + ", idConta=" + idConta
+				+ ", idFornecedor=" + idFornecedor + ", descMov=" + descMov + ", valorMov=" + valorMov + ", tipoMov="
+				+ tipoMov + ", dataMov=" + dataMov + "]";
+	}
+
 	public String getDescMov() {
 		return descMov;
 	}
@@ -90,8 +97,8 @@ public class MovimentacaoBancaria {
 		return dataMov;
 	}
 
-	public void setDataMov(Date dataMov) {
-		this.dataMov = dataMov;
+	public void setDataMov(java.util.Date date) {
+		this.dataMov = (Date) date;
 	}
 
 }

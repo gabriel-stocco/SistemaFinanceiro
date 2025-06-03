@@ -10,15 +10,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.File;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.sf.model.MovimentacaoBancaria;
+import com.sf.model.OFXImport;
 import com.sf.telas.TelaPrincipal;
+
 
 @SuppressWarnings("serial")
 public class PainelTitulo extends JPanel {
@@ -92,6 +99,43 @@ public class PainelTitulo extends JPanel {
 				telaPrincipal.trocarPainel(cadastro);
 			}
 		});
+		
+		jbImportar.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				
+				JFileChooser fileChooser = new JFileChooser();
+
+		        fileChooser.setDialogTitle("Selecionar arquivo OFX");
+
+		        // Filtro para arquivos OFX
+		        FileNameExtensionFilter filtro = new FileNameExtensionFilter("Arquivos OFX", "ofx");
+		        fileChooser.setFileFilter(filtro);
+
+		        int resultado = fileChooser.showOpenDialog(null);
+
+		        if (resultado == JFileChooser.APPROVE_OPTION) {
+		        	File arquivo = fileChooser.getSelectedFile();	        	
+					OFXImport leitor = new OFXImport();
+					
+					
+					List<MovimentacaoBancaria> lista = leitor.importarOFX(arquivo);
+					
+					//teste
+					
+		            for (MovimentacaoBancaria mov : lista) {
+		                System.out.println("Tipo: " + mov.getTipoMov());
+		                System.out.println("Valor: " + mov.getValorMov());
+		                System.out.println("Data: " + mov.getDataMov());
+		                System.out.println("Descrição: " + mov.getDescMov());
+		                System.out.println("------------------------------");
+		            }
+		            
+		        }
+			}
+		});
+
 	}
 
 	private JButton criarBotao(String titulo) {
