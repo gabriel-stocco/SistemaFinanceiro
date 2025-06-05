@@ -109,7 +109,6 @@ public class PainelCadastroClassificacao extends JPanel {
 	private void criarEventos() {
 		jbCadastrar.addActionListener(new ActionListener() {
 			String nome;
-
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!fieldNome.getText().isEmpty()) {

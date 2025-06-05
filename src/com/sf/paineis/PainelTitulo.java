@@ -18,11 +18,14 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import com.sf.model.ClassificacaoDAO;
 import com.sf.model.MovimentacaoBancaria;
+import com.sf.model.MovimentacaoBancariaDAO;
 import com.sf.model.OFXImport;
 import com.sf.telas.TelaPrincipal;
 
@@ -104,7 +107,7 @@ public class PainelTitulo extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				MovimentacaoBancariaDAO dao = new MovimentacaoBancariaDAO();
 				JFileChooser fileChooser = new JFileChooser();
 
 		        fileChooser.setDialogTitle("Selecionar arquivo OFX");
@@ -124,12 +127,9 @@ public class PainelTitulo extends JPanel {
 					
 					//teste
 					
-		            for (MovimentacaoBancaria mov : lista) {
-		                System.out.println("Tipo: " + mov.getTipoMov());
-		                System.out.println("Valor: " + mov.getValorMov());
-		                System.out.println("Data: " + mov.getDataMov());
-		                System.out.println("Descrição: " + mov.getDescMov());
-		                System.out.println("------------------------------");
+		            for (MovimentacaoBancaria mov : lista) {           	
+		            	JOptionPane.showMessageDialog(null, dao.salvar(mov));
+
 		            }
 		            
 		        }
