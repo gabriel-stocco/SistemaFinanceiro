@@ -16,8 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.sf.classes.FloatingLabelField;
+import com.sf.dao.FornecedorDAO;
 import com.sf.model.Fornecedor;
-import com.sf.model.FornecedorDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")

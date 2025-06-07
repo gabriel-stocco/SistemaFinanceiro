@@ -17,8 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.sf.classes.TabelaModular;
+import com.sf.dao.ContaDAO;
 import com.sf.model.ContaBancaria;
-import com.sf.model.ContaDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")

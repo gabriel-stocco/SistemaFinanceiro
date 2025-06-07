@@ -1,4 +1,4 @@
-package com.sf.model;
+package com.sf.importacao;
 
 import java.io.*;
 import java.text.ParseException;
@@ -7,6 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.swing.*;
+
+import com.sf.model.MovimentacaoBancaria;
 
 
 // Classe para importar o OFX

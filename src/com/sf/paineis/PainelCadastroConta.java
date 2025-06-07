@@ -19,12 +19,12 @@ import javax.swing.JPanel;
 
 import com.sf.classes.FloatingLabelComboBox;
 import com.sf.classes.FloatingLabelField;
+import com.sf.dao.BancoDAO;
+import com.sf.dao.ContaDAO;
+import com.sf.dao.EmpresaDAO;
 import com.sf.model.Banco;
-import com.sf.model.BancoDAO;
 import com.sf.model.ContaBancaria;
-import com.sf.model.ContaDAO;
 import com.sf.model.Empresa;
-import com.sf.model.EmpresaDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")

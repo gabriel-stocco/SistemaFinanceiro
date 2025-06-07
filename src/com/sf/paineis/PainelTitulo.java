@@ -23,10 +23,10 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.sf.model.ClassificacaoDAO;
+import com.sf.dao.ClassificacaoDAO;
+import com.sf.dao.MovimentacaoBancariaDAO;
+import com.sf.importacao.OFXImport;
 import com.sf.model.MovimentacaoBancaria;
-import com.sf.model.MovimentacaoBancariaDAO;
-import com.sf.model.OFXImport;
 import com.sf.telas.TelaPrincipal;
 
 

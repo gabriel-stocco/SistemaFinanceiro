@@ -17,8 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.sf.classes.TabelaModular;
+import com.sf.dao.ClassificacaoDAO;
 import com.sf.model.Classificacao;
-import com.sf.model.ClassificacaoDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")

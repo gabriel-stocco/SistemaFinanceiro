@@ -22,14 +22,14 @@ import javax.swing.JPanel;
 import com.sf.classes.FloatingLabelComboBox;
 import com.sf.classes.FloatingLabelField;
 import com.sf.classes.TipoMovimentacao;
+import com.sf.dao.ClassificacaoDAO;
+import com.sf.dao.ContaDAO;
+import com.sf.dao.FornecedorDAO;
+import com.sf.dao.MovimentacaoBancariaDAO;
 import com.sf.model.Classificacao;
-import com.sf.model.ClassificacaoDAO;
 import com.sf.model.ContaBancaria;
-import com.sf.model.ContaDAO;
 import com.sf.model.Fornecedor;
-import com.sf.model.FornecedorDAO;
 import com.sf.model.MovimentacaoBancaria;
-import com.sf.model.MovimentacaoBancariaDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")

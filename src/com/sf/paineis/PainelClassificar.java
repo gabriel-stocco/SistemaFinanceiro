@@ -12,8 +12,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import com.sf.classes.TabelaModular;
+import com.sf.dao.MovimentacaoBancariaDAO;
 import com.sf.model.MovimentacaoBancaria;
-import com.sf.model.MovimentacaoBancariaDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")

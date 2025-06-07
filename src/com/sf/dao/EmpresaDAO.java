@@ -1,10 +1,11 @@
-package com.sf.model;
+package com.sf.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.sf.bd.BD;
+import com.sf.model.Empresa;
 
 public class EmpresaDAO {
 

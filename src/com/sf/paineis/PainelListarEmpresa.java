@@ -17,8 +17,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.sf.classes.TabelaModular;
+import com.sf.dao.EmpresaDAO;
 import com.sf.model.Empresa;
-import com.sf.model.EmpresaDAO;
 import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
