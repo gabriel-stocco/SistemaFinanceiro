@@ -1,50 +1,51 @@
 package com.sf.paineis;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Font;
+import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-
-import com.sf.classes.GraficoSimples;
+import com.sf.classes.GraficoBarras;
+import com.sf.dao.MovimentacaoBancariaDAO;
+import com.sf.model.DadosGrafico;
+import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelRelatorio extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
-	private JLabel jlTitulo;
-	private GraficoSimples grafico;
+    private JLabel jlTitulo;
+    private GraficoBarras grafico;
+    private List<DadosGrafico> dados = new ArrayList<>();
+    private MovimentacaoBancariaDAO dao = new MovimentacaoBancariaDAO();
 
-	public PainelRelatorio() {
-		super();
-		setLayout(null);
-		setBackground(COR_CONTEUDO);
-		iniciarComponentes();
-		criarEventos();
-	}
+    public PainelRelatorio() {
+        super(new BorderLayout());
+        setBackground(TelaPrincipal.COR_CONTEUDO);
 
-	private void iniciarComponentes() {
-		// Título do Painel
-		jlTitulo = new JLabel("RELATÓRIOS");
-		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
-		jlTitulo.setForeground(Color.WHITE);
-		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        iniciarComponentes();
+    }
 
-		grafico = new GraficoSimples();
-		grafico.setBounds(30, 70, 500, 300);
-		add(grafico);
+    private void iniciarComponentes() {
+        // ----- TÍTULO NO TOPO -----
+        JPanel painelTitulo = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        painelTitulo.setOpaque(false);
+        painelTitulo.setBorder(new EmptyBorder(20, 30, 0, 0));
+        jlTitulo = new JLabel("RELATÓRIO - VALOR DAS CLASSIFICAÇÕES");
+        jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        jlTitulo.setForeground(Color.WHITE);
+        painelTitulo.add(jlTitulo);
+        add(painelTitulo, BorderLayout.NORTH);
 
-		// Adicionando ao Painel
-		add(jlTitulo);
-		add(grafico);
+        // ----- DADOS E GRÁFICO -----
+        dados = dao.buscarDadosGrafico();
+        grafico = new GraficoBarras();
+        grafico.setDados(dados);
 
-		// Posicionamento
-		jlTitulo.setBounds(30, 20, 500, 30);
-		grafico.setBounds(30, 70, 480, 300);
-	}
+        // Painel central para o gráfico
+        JPanel painelCentral = new JPanel(new GridBagLayout());
+        painelCentral.setOpaque(false);
+        painelCentral.add(grafico);
 
-	private void criarEventos() {
-		// TODO Auto-generated method stub
-
-	}
+        add(painelCentral, BorderLayout.CENTER);
+    }
 }

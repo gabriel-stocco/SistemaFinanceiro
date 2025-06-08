@@ -1,62 +1,96 @@
 package com.sf.classes;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
 import javax.swing.JPanel;
+
+import com.sf.model.DadosGrafico;
+
+import java.awt.*;
+import java.text.DecimalFormat;
+import java.util.List;
+import java.util.ArrayList;
 
 @SuppressWarnings("serial")
 public class GraficoSimples extends JPanel {
-	private int[] valores = { 10, 20, 30, 40, 50 };
-	private String[] rotulos = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
 
-	public GraficoSimples() {
-		setBackground(new Color(200, 200, 200));
-	}
+    private List<DadosGrafico> dados = new ArrayList<>();
+    private List<Color> coresAleatorias = new ArrayList<>();
+    DecimalFormat df = new DecimalFormat("#,##0.00");
 
-	@Override
-	protected void paintComponent(Graphics g) {
-		super.paintComponent(g);
+    private final Color[] cores = {
+        new Color(255, 99, 132),
+        new Color(54, 162, 235),
+        new Color(255, 206, 86),
+        new Color(75, 192, 192),
+        new Color(153, 102, 255),
+        new Color(255, 159, 64),
+        new Color(100, 200, 100),
+        new Color(200, 100, 200)
+    };
 
-		Graphics2D g2d = (Graphics2D) g;
-		int alturaMax = 50;
-		int padding = 40;
-		int baseY = getHeight() - padding;
-		int esquerda = padding;
-		int larguraTotal = getWidth() - 2 * padding;
-		int alturaUtil = getHeight() - 2 * padding;
+    public GraficoSimples() {
+        setBackground(new Color(240, 240, 240));
+    }
 
-		int larguraBarra = larguraTotal / valores.length / 2;
-		int espacamento = larguraTotal / valores.length;
+    public void setDados(List<DadosGrafico> dados) {
+        this.dados = dados;
+        gerarCoresAleatorias();
+        repaint();
+    }
 
-		// Linhas horizontais (grade)
-		g2d.setColor(new Color(220, 220, 220));
-		for (int i = 0; i <= alturaMax; i += 10) {
-			int y = baseY - (i * alturaUtil / alturaMax);
-			g2d.drawLine(esquerda, y, esquerda + larguraTotal, y);
-			g2d.setColor(Color.DARK_GRAY);
-			g2d.drawString(String.valueOf(i), esquerda - 25, y + 5);
-			g2d.setColor(new Color(220, 220, 220));
-		}
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-		g2d.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        if (dados == null || dados.isEmpty()) return;
 
-		// Barras
-		for (int i = 0; i < valores.length; i++) {
-			int altura = valores[i] * alturaUtil / alturaMax;
-			int x = esquerda + i * espacamento + espacamento / 4;
-			int y = baseY - altura;
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-			g2d.setColor(new Color(102, 204, 255));
-			g2d.fillRect(x, y, larguraBarra, altura);
+        double total = dados.stream().mapToDouble(DadosGrafico::getValor).sum();
 
-			g2d.setColor(Color.BLACK);
-			FontMetrics fm = g.getFontMetrics();
-			int textoLargura = fm.stringWidth(rotulos[i]);
-			g2d.drawString(rotulos[i], x + (larguraBarra - textoLargura) / 2, baseY + 15);
-		}
-	}
+        int width = getWidth();
+        int height = getHeight();
+        int diameter = Math.min(width, height) - 100;
+        int x = 40;
+        int y = 40;
+
+        double anguloInicio = 0;
+
+        for (int i = 0; i < dados.size(); i++) {
+            DadosGrafico dado = dados.get(i);
+            double angulo = dado.getValor() * 360 / total;
+
+            g2d.setColor(cores[i % cores.length]);
+            g2d.fillArc(x, y, diameter, diameter, (int) anguloInicio, (int) Math.round(angulo));
+            anguloInicio += angulo;
+        }
+
+        // Legenda
+        int espacoLegenda = 35;
+        int totalLegendaAltura = dados.size() * espacoLegenda;
+        int legendaY = y + (diameter - totalLegendaAltura) / 2;
+        int legendaX = x + diameter + 40;
+
+        g2d.setFont(new Font("Arial", Font.BOLD, 14));
+        for (int i = 0; i < dados.size(); i++) {
+            DadosGrafico dado = dados.get(i);
+            g2d.setColor(cores[i % cores.length]);
+            g2d.fillRect(legendaX, legendaY + i * espacoLegenda, 15, 15);
+            g2d.setColor(Color.BLACK);
+            String label = dado.getCategoria() + " (R$ " + df.format(dado.getValor()) + ")";
+            g2d.drawString(label, legendaX + 20, legendaY + 12 + i * espacoLegenda);
+        }
+    }
+    
+    private void gerarCoresAleatorias() {
+        coresAleatorias.clear();
+        for (int i = 0; i < dados.size(); i++) {
+            Color cor = new Color(
+                (int) (Math.random() * 256),
+                (int) (Math.random() * 256),
+                (int) (Math.random() * 256)
+            );
+            coresAleatorias.add(cor);
+        }
+    }
 }

@@ -22,7 +22,6 @@ import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelCadastroEmpresa extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldNome, fieldCnpj, fieldLogradouro;
 	private JButton jbCadastrar, jbCancelar;
@@ -35,7 +34,7 @@ public class PainelCadastroEmpresa extends JPanel {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 	}
@@ -45,7 +44,7 @@ public class PainelCadastroEmpresa extends JPanel {
 		this.telaPrincipal = telaPrincipal;
 		this.empresa = empresa;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 
@@ -70,9 +69,9 @@ public class PainelCadastroEmpresa extends JPanel {
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldNome = new FloatingLabelField("Nome da Empresa", 430, null);
-		fieldCnpj = new FloatingLabelField("CNPJ da Empresa", 430, "##.###.###/####-##");
-		fieldLogradouro = new FloatingLabelField("Endereço", 920, null);
+		fieldNome = new FloatingLabelField("Nome da Empresa", 430, null, true);
+		fieldCnpj = new FloatingLabelField("CNPJ da Empresa", 430, "##.###.###/####-##", true);
+		fieldLogradouro = new FloatingLabelField("Endereço", 920, null, true);
 
 		// Botão do formulario
 		jbCadastrar = new JButton("SALVAR");

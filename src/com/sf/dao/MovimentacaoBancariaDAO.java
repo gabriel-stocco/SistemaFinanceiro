@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sf.bd.BD;
+import com.sf.model.DadosGrafico;
 import com.sf.model.MovimentacaoBancaria;
 
 public class MovimentacaoBancariaDAO {
@@ -227,5 +228,113 @@ public class MovimentacaoBancariaDAO {
 			bd.close();
 		}
 		return m;
+	}
+	
+	/**
+	 * Soma os valores de movimentações do mês anterior de um tipo específico
+	 *
+	 * @param tipoMov - tipo da movimentação ('C' ou 'D', por exemplo)
+	 * @return soma dos valores encontrados ou 0 caso nenhum registro seja encontrado
+	 */
+	public float buscarValores(String tipoMov) {
+	    float total = 0;
+	    sql = "SELECT SUM(Valor_Mov) FROM MovimentacaoBancaria " +
+	            "WHERE Tipo_Mov = ? " +
+	            "AND MONTH(Data_Mov) = MONTH(DATEADD(MONTH, -1, GETDATE())) " +
+	            "AND YEAR(Data_Mov) = YEAR(DATEADD(MONTH, -1, GETDATE()))";
+
+	    try {
+	        bd.getConnection();
+	        bd.st = bd.con.prepareStatement(sql);
+	        bd.st.setString(1, tipoMov);
+	        bd.rs = bd.st.executeQuery();
+
+	        if (bd.rs.next()) {
+	            total = bd.rs.getFloat(1);
+	        }
+	    } catch (SQLException erro) {
+	        erro.printStackTrace();
+	    } finally {
+	        bd.close();
+	    }
+
+	    return total;
+	}
+	
+	/**
+	 * Soma os valores de movimentações do até o dia atual para pegar o saldo atual
+	 * 
+	 * @return soma dos valores encontrados ou 0 caso nenhum registro seja encontrado
+	 */
+	public float buscarSaldo() {
+	    float total = 0;
+	    sql = "SELECT SUM(Valor_Mov) FROM MovimentacaoBancaria WHERE Data_Mov <= GETDATE()";
+
+	    try {
+	        bd.getConnection();
+	        bd.st = bd.con.prepareStatement(sql);
+	        bd.rs = bd.st.executeQuery();
+
+	        if (bd.rs.next()) {
+	            total = bd.rs.getFloat(1);
+	        }
+	    } catch (SQLException erro) {
+	        erro.printStackTrace();
+	    } finally {
+	        bd.close();
+	    }
+
+	    return total;
+	}
+	
+	/**
+	 * Soma os valores das previsões do próximo mês
+	 * 
+	 * @return soma dos valores encontrados ou 0 caso nenhum registro seja encontrado
+	 */
+	public float buscarPrevisoes() {
+	    float total = 0;
+	    sql = "SELECT SUM(Valor_Mov) FROM MovimentacaoBancaria WHERE MONTH(Data_Mov) = MONTH(GETDATE())+1 AND YEAR(Data_Mov) = YEAR(GETDATE())";
+
+	    try {
+	        bd.getConnection();
+	        bd.st = bd.con.prepareStatement(sql);
+	        bd.rs = bd.st.executeQuery();
+
+	        if (bd.rs.next()) {
+	            total = bd.rs.getFloat(1);
+	        }
+	    } catch (SQLException erro) {
+	        erro.printStackTrace();
+	    } finally {
+	        bd.close();
+	    }
+
+	    return total;
+	}
+	
+	public List<DadosGrafico> buscarDadosGrafico() {
+	    List<DadosGrafico> dados = new ArrayList<>();
+	    String sql = "SELECT SUM(Valor_Mov), cl.Nom_Classificacao FROM MovimentacaoBancaria mov, Classificacao cl "
+	    		+ "WHERE mov.Id_Classificacao = cl.Id_Classificacao GROUP BY cl.Nom_Classificacao";
+	    
+	    try {
+	        bd.getConnection();
+	        bd.st = bd.con.prepareStatement(sql);
+	        bd.rs = bd.st.executeQuery();
+
+	        while (bd.rs.next()) {
+	        	DadosGrafico dado =  new DadosGrafico();
+	            dado.setValor(bd.rs.getFloat(1));
+	            dado.setCategoria(bd.rs.getString(2));
+	            dados.add(dado);
+	        }
+	    } catch (SQLException erro) {
+	        erro.printStackTrace();
+	    } finally {
+	        bd.close();
+	    }
+
+	    return dados;
 	}
 }

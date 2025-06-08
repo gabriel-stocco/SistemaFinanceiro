@@ -23,7 +23,6 @@ import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelListarFornecedor extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private TabelaModular<Fornecedor> tabela;
 	private JLabel jlTitulo;
 	private JButton jbAdicionar;
@@ -36,7 +35,7 @@ public class PainelListarFornecedor extends JPanel {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 	}
@@ -60,7 +59,6 @@ public class PainelListarFornecedor extends JPanel {
 
 		// Colunas da tabela
 		LinkedHashMap<String, String> camposParaColunas = new LinkedHashMap<>();
-		camposParaColunas.put("idFornecedor", "Código");
 		camposParaColunas.put("emailForn", "E-mail");
 		camposParaColunas.put("cnjpForn", "CNPJ");
 

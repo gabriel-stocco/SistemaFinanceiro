@@ -8,15 +8,18 @@ import javax.swing.*;
 @SuppressWarnings("serial")
 public class FloatingLabelComboBox<T> extends JPanel {
 	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
-	private final JLabel label;
-	private final JComboBox<ItemWrapper<T>> comboBox;
+	private JLabel label;
+	private JComboBox<ItemWrapper<T>> comboBox;
+	private boolean required;
 
-	public FloatingLabelComboBox(String texto, int width) {
+	public FloatingLabelComboBox(String texto, int width, boolean required) {
+		this.required = required;
+		
 		setLayout(null);
 		setBackground(COR_CONTEUDO);
 		setPreferredSize(null);
 
-		label = new JLabel(texto);
+		label = new JLabel(formatarTextoLabel(texto));
 		label.setFont(new Font("Segoe UI", Font.PLAIN, 22));
 		label.setForeground(Color.WHITE);
 		label.setBounds(0, 5, width, 30);
@@ -73,6 +76,14 @@ public class FloatingLabelComboBox<T> extends JPanel {
 			}
 		}
 		comboBox.setSelectedIndex(0);
+	}
+	
+	private String formatarTextoLabel(String texto) {
+		if (required) {
+			// HTML necessário para aplicar cor ao asterisco
+			return "<html>" + texto + " <font color='#cc0000'>*</font></html>";
+		}
+		return texto;
 	}
 
 	// Classe interna para cada item ter label e value

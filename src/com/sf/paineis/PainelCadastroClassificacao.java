@@ -22,7 +22,6 @@ import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelCadastroClassificacao extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldNome;
 	private JButton jbCadastrar, jbCancelar;
@@ -35,7 +34,7 @@ public class PainelCadastroClassificacao extends JPanel {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 	}
@@ -45,7 +44,7 @@ public class PainelCadastroClassificacao extends JPanel {
 		this.telaPrincipal = telaPrincipal;
 		this.classificacao = classificacao;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 
@@ -68,7 +67,7 @@ public class PainelCadastroClassificacao extends JPanel {
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldNome = new FloatingLabelField("Nome da Classificação", 920, null);
+		fieldNome = new FloatingLabelField("Nome da Classificação", 920, null, true);
 
 		// Botão do formulario
 		jbCadastrar = new JButton("SALVAR");

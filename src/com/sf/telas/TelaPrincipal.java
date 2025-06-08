@@ -12,6 +12,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.text.DecimalFormat;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -23,6 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.sf.dao.MovimentacaoBancariaDAO;
 import com.sf.paineis.PainelListarClassificacao;
 import com.sf.paineis.PainelListarContas;
 import com.sf.paineis.PainelListarEmpresa;
@@ -33,13 +35,16 @@ import com.sf.paineis.PainelTitulo;
 @SuppressWarnings("serial")
 public class TelaPrincipal extends JFrame {
 	private JPanel painelConteudo, painelMenu, submenuCadastros, painelDashboard;
-	private JLabel menuLabel = new JLabel("MENU");
-	private JButton jbDashboard, jbCadastro, jbClassificacao, jbConta, jbEmpresa, jbFornecedor, jbTitulo, jbConciliacao,
+	private JLabel menuLabel = new JLabel("MENU"), jlTitulo;
+	private JButton jbDashboard, jbCadastro, jbClassificacao, jbConta, jbEmpresa, jbFornecedor, jbTitulo,
 			jbRelatorio;
 	private Container contentPane;
 	private static final Color COR_MENU = new Color(140, 140, 140);
-	private static final Color COR_HOVER = new Color(180, 180, 180);
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
+	public static final Color COR_HOVER = new Color(180, 180, 180);
+	public static final Color COR_CONTEUDO = new Color(180, 180, 180);
+	MovimentacaoBancariaDAO dao = new MovimentacaoBancariaDAO();
+	public float entradas, saidas, saldo, previsoes;
+	DecimalFormat df = new DecimalFormat("#,##0.00");
 
 	public TelaPrincipal() {
 		super();
@@ -93,10 +98,7 @@ public class TelaPrincipal extends JFrame {
 		jbTitulo = criarBotaoMenu("TÍTULOS");
 		painelMenu.add(jbTitulo);
 		painelMenu.add(Box.createVerticalStrut(10));
-		jbConciliacao = criarBotaoMenu("CONCILIAÇÃO");
-		painelMenu.add(jbConciliacao);
 		jbRelatorio = criarBotaoMenu("RELATÓRIOS");
-		painelMenu.add(Box.createVerticalStrut(10));
 		painelMenu.add(jbRelatorio);
 
 		add(painelMenu, BorderLayout.WEST);
@@ -108,17 +110,31 @@ public class TelaPrincipal extends JFrame {
 		contentPane.add(painelConteudo, BorderLayout.CENTER);
 
 		// Painel de Dashboard
+		jlTitulo = new JLabel("DASHBOARD");
+		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
+		jlTitulo.setForeground(Color.WHITE);
+		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
+		
 		painelDashboard = new JPanel();
 		painelDashboard.setBackground(COR_CONTEUDO);
 		painelDashboard.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
-		painelDashboard.setBorder(new EmptyBorder(50, 00, 0, 0));
+		painelDashboard.setBorder(new EmptyBorder(120, 0, 0, 0));
+		
+		//Buscando Valores do DASHBOARD
+		entradas = dao.buscarValores("C");
+		saidas = dao.buscarValores("D");
+		previsoes = dao.buscarPrevisoes();
+		saldo = dao.buscarSaldo();
 
-		painelDashboard.add(criarCard("Saídas totais", "R$ 0,00"));
-		painelDashboard.add(criarCard("Entradas totais", "R$ 0,00"));
-		painelDashboard.add(criarCard("Previsão semanal", "R$ 0,00"));
-		painelDashboard.add(criarCard("Saldo total", "R$ 0,00"));
+		painelDashboard.add(criarCard("SAÍDAS TOTAIS", "R$ " + df.format(saidas)));
+		painelDashboard.add(criarCard("ENTRADAS TOTAIS", "R$ " + df.format(entradas)));
+		painelDashboard.add(criarCard("PREVISÃO MENSAL", "R$ " + df.format(previsoes)));
+		painelDashboard.add(criarCard("SALDO TOTAL", "R$ " + df.format(saldo)));
 
+		painelConteudo.add(jlTitulo);
 		painelConteudo.add(painelDashboard);
+
+		jlTitulo.setBounds(30, 25, 500, 30);
 	}
 
 	private JButton criarBotaoMenu(String nome) {
@@ -297,8 +313,8 @@ public class TelaPrincipal extends JFrame {
 		JPanel card = new JPanel();
 		card.setBackground(new Color(13, 33, 79));
 		card.setLayout(new BorderLayout());
-		card.setPreferredSize(new Dimension(450, 120));
-		card.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 10));
+		card.setPreferredSize(new Dimension(450, 130));
+		card.setBorder(BorderFactory.createEmptyBorder(25, 20, 10, 10));
 
 		JLabel labelTitulo = new JLabel(titulo);
 		labelTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));

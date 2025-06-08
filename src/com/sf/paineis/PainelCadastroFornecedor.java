@@ -22,8 +22,6 @@ import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelCadastroFornecedor extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
-	private static final Color COR_HOVER = new Color(200, 200, 200);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldEmail, fieldCnpj, fieldLogradouro;
 	private JButton jbCadastrar, jbCancelar;
@@ -36,7 +34,7 @@ public class PainelCadastroFornecedor extends JPanel {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 	}
@@ -46,7 +44,7 @@ public class PainelCadastroFornecedor extends JPanel {
 		this.telaPrincipal = telaPrincipal;
 		this.fornecedor = fornecedor;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 
@@ -71,9 +69,9 @@ public class PainelCadastroFornecedor extends JPanel {
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldEmail = new FloatingLabelField("Email do Fornecedor", 430, null);
-		fieldCnpj = new FloatingLabelField("CNPJ do Fornecedor", 430, "##.###.###/####-##");
-		fieldLogradouro = new FloatingLabelField("Endereço", 920, null);
+		fieldEmail = new FloatingLabelField("Email do Fornecedor", 430, null, true);
+		fieldCnpj = new FloatingLabelField("CNPJ do Fornecedor", 430, "##.###.###/####-##", true);
+		fieldLogradouro = new FloatingLabelField("Endereço", 920, null, true);
 
 		// Botão do formulario
 		jbCadastrar = new JButton("SALVAR");
@@ -166,7 +164,7 @@ public class PainelCadastroFornecedor extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				jbCadastrar.setBorderPainted(true);
-				jbCadastrar.setBorder(BorderFactory.createLineBorder(COR_HOVER, 2));
+				jbCadastrar.setBorder(BorderFactory.createLineBorder(TelaPrincipal.COR_HOVER, 2));
 			}
 
 			@Override

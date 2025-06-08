@@ -27,7 +27,6 @@ import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelCadastroClassificar extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldDesc;
 	private JButton jbCadastrar, jbCancelar;
@@ -43,7 +42,7 @@ public class PainelCadastroClassificar extends JPanel {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 	}
@@ -53,7 +52,7 @@ public class PainelCadastroClassificar extends JPanel {
 		this.telaPrincipal = telaPrincipal;
 		this.movimentacao = movimentacao;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 
@@ -76,11 +75,11 @@ public class PainelCadastroClassificar extends JPanel {
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldDesc = new FloatingLabelField("Descrição", 540, null);
+		fieldDesc = new FloatingLabelField("Descrição", 540, null, true);
 
 		// Select de classificacao
 		classificacoes = classiDAO.listar();
-		comboClassificacao = new FloatingLabelComboBox<>("Classificação", 330);
+		comboClassificacao = new FloatingLabelComboBox<>("Classificação", 330, true);
 		comboClassificacao.setOptions(classificacoes, Classificacao::getNomClassificacao,
 				Classificacao::getIdClassificacao);
 

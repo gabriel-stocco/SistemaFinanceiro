@@ -18,7 +18,6 @@ import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelClassificar extends JPanel {
-	private final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private TabelaModular<MovimentacaoBancaria> tabela;
 	private MovimentacaoBancariaDAO dao = new MovimentacaoBancariaDAO();
@@ -30,7 +29,7 @@ public class PainelClassificar extends JPanel {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 	}
 

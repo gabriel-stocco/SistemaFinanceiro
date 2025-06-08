@@ -7,7 +7,7 @@ import java.sql.Date;
  */
 public class MovimentacaoBancaria {
 	private int idMov;
-	private int idClassificacao;
+	private Object idClassificacao;
 	private Object idConta;
 	private Object idFornecedor;
 	private String descMov;
@@ -19,7 +19,7 @@ public class MovimentacaoBancaria {
 		// TODO Auto-generated constructor stub
 	}
 
-	public MovimentacaoBancaria(String descMov, float valorMov, String tipoMov, Date dataMov, int idClassificacao,
+	public MovimentacaoBancaria(String descMov, float valorMov, String tipoMov, Date dataMov, Object idClassificacao,
 			Object idConta, Object idForn) {
 		this.descMov = descMov;
 		this.valorMov = valorMov;
@@ -38,11 +38,11 @@ public class MovimentacaoBancaria {
 		this.idMov = idMov;
 	}
 
-	public int getIdClassificacao() {
+	public Object getIdClassificacao() {
 		return idClassificacao;
 	}
 
-	public void setIdClassificacao(int idClassificacao) {
+	public void setIdClassificacao(Object idClassificacao) {
 		this.idClassificacao = idClassificacao;
 	}
 

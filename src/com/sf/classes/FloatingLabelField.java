@@ -19,18 +19,22 @@ public class FloatingLabelField extends JPanel {
 	private JLabel label;
 	final int LABEL_Y_NORMAL = 25;
 	final int LABEL_Y_FLOAT = 5;
+	private boolean required;
 
 	/**
 	 * @param texto Texto do label
 	 * @param width Largura do campo
 	 * @param mask  Caso o tipo seja MASK, define a máscara (ex:"###.###.###-##")
+	 * @param required Determina se o campo é obrigatório ou não
 	 */
-	public FloatingLabelField(String texto, int width, String mask) {
+	public FloatingLabelField(String texto, int width, String mask, boolean required) {
+		this.required = required;
+		
 		setLayout(null);
 		setBackground(COR_CONTEUDO);
 		setPreferredSize(new Dimension(300, 60));
 
-		label = new JLabel(texto);
+		label = new JLabel(formatarTextoLabel(texto));
 		label.setFont(new Font("Segoe UI", Font.PLAIN, 22));
 		label.setForeground(Color.WHITE);
 		label.setBounds(0, 5, width, 30);
@@ -62,6 +66,14 @@ public class FloatingLabelField extends JPanel {
 			e.printStackTrace();
 		}
 		return new JFormattedTextField();
+	}
+	
+	private String formatarTextoLabel(String texto) {
+		if (required) {
+			// HTML necessário para aplicar cor ao asterisco
+			return "<html>" + texto + " <font color='#cc0000'>*</font></html>";
+		}
+		return texto;
 	}
 
 	public String getText() {

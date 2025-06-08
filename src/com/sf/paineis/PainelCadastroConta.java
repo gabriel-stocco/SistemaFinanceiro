@@ -29,7 +29,6 @@ import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelCadastroConta extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldAgencia, fieldNumeroConta, fieldSaldo;
 	private FloatingLabelComboBox<Banco> comboBanco;
@@ -48,7 +47,7 @@ public class PainelCadastroConta extends JPanel {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 	}
@@ -58,7 +57,7 @@ public class PainelCadastroConta extends JPanel {
 		this.telaPrincipal = telaPrincipal;
 		this.conta = conta;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 
@@ -97,18 +96,18 @@ public class PainelCadastroConta extends JPanel {
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldAgencia = new FloatingLabelField("Agência", 263, null);
-		fieldNumeroConta = new FloatingLabelField("Número da Conta", 263, "########-#");
-		fieldSaldo = new FloatingLabelField("Saldo Atual", 265, null);
+		fieldAgencia = new FloatingLabelField("Agência", 263, null, true);
+		fieldNumeroConta = new FloatingLabelField("Número da Conta", 263, "########-#", true);
+		fieldSaldo = new FloatingLabelField("Saldo Atual", 265, null, true);
 
 		// Select de fornecedores
 		empresas = empresaDAO.listar();
-		comboEmpresa = new FloatingLabelComboBox<>("Empresa", 430);
+		comboEmpresa = new FloatingLabelComboBox<>("Empresa", 430, true);
 		comboEmpresa.setOptions(empresas, Empresa::getNome_Emp, Empresa::getEmpresa);
 
 		// Select de fornecedores
 		bancos = bancoDAO.listar();
-		comboBanco = new FloatingLabelComboBox<>("Banco", 430);
+		comboBanco = new FloatingLabelComboBox<>("Banco", 430, true);
 		comboBanco.setOptions(bancos, Banco::getNomeBanco, Banco::getIdBanco);
 
 		// Botão do formulario

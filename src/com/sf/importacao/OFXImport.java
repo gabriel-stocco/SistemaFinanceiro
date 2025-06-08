@@ -3,8 +3,6 @@ package com.sf.importacao;
 import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import javax.swing.*;
 
@@ -39,8 +37,7 @@ public class OFXImport {
                    	mov.setDataMov(parseData(data));
                     
                     // talvez mude
-                    mov.setIdMov(0); 
-                    mov.setIdClassificacao(0);
+                    mov.setIdClassificacao(null);
                     mov.setIdConta(null);
                     mov.setIdFornecedor(null);
                     
@@ -54,6 +51,14 @@ public class OFXImport {
 	                if (linha.startsWith("<TRNTYPE>")) {
 	                    tipo = linha.replace("<TRNTYPE>", "").trim();
 	                    tipo = tipo.replace("</TRNTYPE>", "");
+	                    
+	                    if (tipo.equalsIgnoreCase("CREDIT")) {
+	                        tipo = "C";
+	                    } else if (tipo.equalsIgnoreCase("DEBIT")) {
+	                        tipo = "D";
+	                    } else {
+	                    	tipo = "";
+	                    }
 	                    
 	                } else if (linha.startsWith("<DTPOSTED>")) {
 	                    data = linha.replace("<DTPOSTED>", "").trim();

@@ -23,7 +23,6 @@ import javax.swing.JPanel;
 import javax.swing.border.Border;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import com.sf.dao.ClassificacaoDAO;
 import com.sf.dao.MovimentacaoBancariaDAO;
 import com.sf.importacao.OFXImport;
 import com.sf.model.MovimentacaoBancaria;
@@ -32,7 +31,6 @@ import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelTitulo extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
 	private JLabel jlTitulo;
 	private JButton jbImportar, jbTransferir, jbGerenciar, jbAdicionar;
 
@@ -42,7 +40,7 @@ public class PainelTitulo extends JPanel {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 	}
@@ -125,12 +123,14 @@ public class PainelTitulo extends JPanel {
 					
 					List<MovimentacaoBancaria> lista = leitor.importarOFX(arquivo);
 					
-					//teste
-					
-		            for (MovimentacaoBancaria mov : lista) {           	
-		            	JOptionPane.showMessageDialog(null, dao.salvar(mov));
-
-		            }
+					try {
+			            for (MovimentacaoBancaria mov : lista) { 
+			            	dao.salvar(mov);
+			            }
+			            JOptionPane.showMessageDialog(null, "As informações do arquivo foram salvas");
+					} catch(Exception ex) {
+						JOptionPane.showMessageDialog(null, "Houve um erro ao salvar as informações:\n" + ex);
+					}
 		            
 		        }
 			}

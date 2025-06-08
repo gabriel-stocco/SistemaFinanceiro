@@ -34,8 +34,6 @@ import com.sf.telas.TelaPrincipal;
 
 @SuppressWarnings("serial")
 public class PainelCadastroMovimentacao extends JPanel {
-	private static final Color COR_CONTEUDO = new Color(180, 180, 180);
-	private static final Color COR_HOVER = new Color(200, 200, 200);
 	private JLabel jlTitulo;
 	private FloatingLabelField fieldDesc, fieldValor, fieldData;
 	private FloatingLabelComboBox<TipoMovimentacao> comboTipo;
@@ -59,7 +57,7 @@ public class PainelCadastroMovimentacao extends JPanel {
 		super();
 		this.telaPrincipal = telaPrincipal;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 	}
@@ -69,7 +67,7 @@ public class PainelCadastroMovimentacao extends JPanel {
 		this.telaPrincipal = telaPrincipal;
 		this.movimentacao = movimentacao;
 		setLayout(null);
-		setBackground(COR_CONTEUDO);
+		setBackground(TelaPrincipal.COR_CONTEUDO);
 		iniciarComponentes();
 		criarEventos();
 
@@ -93,7 +91,7 @@ public class PainelCadastroMovimentacao extends JPanel {
 		}
 
 		for (Classificacao classificacao : classificacoes) {
-			if (classificacao.getIdClassificacao() == movimentacao.getIdClassificacao()) {
+			if (classificacao.getIdClassificacao() == Integer.parseInt(movimentacao.getIdClassificacao().toString())) {
 				comboClassificacao.setSelectedItem(classificacao);
 				break;
 			}
@@ -122,26 +120,26 @@ public class PainelCadastroMovimentacao extends JPanel {
 		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		// Campos do Formulario
-		fieldDesc = new FloatingLabelField("Descrição", 600, null);
-		fieldValor = new FloatingLabelField("Valor", 260, null);
-		comboTipo = new FloatingLabelComboBox<>("Tipo", 300);
+		fieldDesc = new FloatingLabelField("Descrição", 600, null, true);
+		fieldValor = new FloatingLabelField("Valor", 260, null, true);
+		comboTipo = new FloatingLabelComboBox<>("Tipo", 300, true);
 		comboTipo.setOptions(List.of(TipoMovimentacao.values()), TipoMovimentacao::getNome, TipoMovimentacao::getId);
-		fieldData = new FloatingLabelField("Data da Movimentação", 350, "##-##-####");
+		fieldData = new FloatingLabelField("Data da Movimentação", 350, "##-##-####", true);
 
 		// Select de classificacao
 		classificacoes = classDAO.listar();
-		comboClassificacao = new FloatingLabelComboBox<>("Classificação", 430);
+		comboClassificacao = new FloatingLabelComboBox<>("Classificação", 430, true);
 		comboClassificacao.setOptions(classificacoes, Classificacao::getNomClassificacao,
 				Classificacao::getIdClassificacao);
 
 		// Select de conta bancaria
 		contas = contaDAO.listarComEmpresa();
-		comboConta = new FloatingLabelComboBox<>("Conta Bancaria", 430);
+		comboConta = new FloatingLabelComboBox<>("Conta Bancaria", 430, true);
 		comboConta.setOptions(contas, ContaBancaria::getNomeEmpresa, ContaBancaria::getIdConta);
 
 		// Select de fornecedores
 		fornecedores = fornDAO.listar();
-		comboFornecedor = new FloatingLabelComboBox<>("Fornecedor", 430);
+		comboFornecedor = new FloatingLabelComboBox<>("Fornecedor", 430, false);
 		comboFornecedor.setOptions(fornecedores, Fornecedor::getEmailForn, Fornecedor::getIdFornecedor);
 
 		// Botão do formulario
@@ -199,19 +197,16 @@ public class PainelCadastroMovimentacao extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				String desc, tipo, dataTexto;
 				float valor;
-				int idClassificacao;
-				Integer idConta = null, idFornecedor = null;
+				int idClassificacao, idConta;
+				Integer idFornecedor = null;
 				if (!fieldDesc.getText().isEmpty() && !comboTipo.isEmpty() && !fieldValor.getText().isEmpty()
-						&& !fieldData.getText().isEmpty() && !comboClassificacao.isEmpty() && (!comboFornecedor.isEmpty()
-						|| !comboConta.isEmpty())) {
+					&& !fieldData.getText().isEmpty() && !comboClassificacao.isEmpty() && !comboConta.isEmpty()) {
 					desc = fieldDesc.getText();
 					tipo = comboTipo.getSelectedValue().toString();
 					valor = Float.parseFloat(fieldValor.getText());
 					dataTexto = fieldData.getText();
 					idClassificacao = (int) comboClassificacao.getSelectedValue();
-					if (!comboConta.isEmpty()) {
-						idConta = (Integer) comboConta.getSelectedValue();
-					}
+					idConta = (int) comboConta.getSelectedValue();
 					if (!comboFornecedor.isEmpty()) {
 						idFornecedor = (Integer) comboFornecedor.getSelectedValue();
 					}
@@ -277,7 +272,7 @@ public class PainelCadastroMovimentacao extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent e) {
 				jbCadastrar.setBorderPainted(true);
-				jbCadastrar.setBorder(BorderFactory.createLineBorder(COR_HOVER, 2));
+				jbCadastrar.setBorder(BorderFactory.createLineBorder(TelaPrincipal.COR_HOVER, 2));
 			}
 
 			@Override
