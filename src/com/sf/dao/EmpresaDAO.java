@@ -50,7 +50,7 @@ public class EmpresaDAO {
 	/**
 	 * Realiza a gravação de uma empresa no banco de dados
 	 * 
-	 * @param c - a empresa a ser salvo
+	 * @param e - a empresa a ser salvo
 	 * @return - uma mensagem informando o ocorrido
 	 */
 	public String salvar(Empresa e) {
@@ -75,7 +75,7 @@ public class EmpresaDAO {
 	/**
 	 * Realiza a atualização de uma empresa no banco de dados
 	 * 
-	 * @param c - a empresa a ser salvo
+	 * @param e - a empresa a ser salvo
 	 * @return - uma mensagem informando o ocorrido
 	 */
 	public String atualizar(Empresa e) {
@@ -104,6 +104,21 @@ public class EmpresaDAO {
 	 * @return - uma mensagem informando o ocorrido
 	 */
 	public String excluir(int codigo) {
+		sql = "update ContaBancaria set Id_Empresa = NULL WHERE Id_Empresa = ?";
+		try {
+			bd.getConnection();
+			bd.st = bd.con.prepareStatement(sql);
+			bd.st.setInt(1, codigo);
+			if (bd.st.executeUpdate() == 1) {
+				men = "Empresa excluida com sucesso!";
+			} else {
+				men = "Empresa não encontrada!";
+			}
+		} catch (SQLException erro) {
+			men = "Falha: " + erro.toString();
+		} finally {
+			bd.close();
+		}
 		sql = "delete from Empresa where Id_Empresa = ?";
 		try {
 			bd.getConnection();

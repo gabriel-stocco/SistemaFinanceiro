@@ -20,10 +20,12 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
+import com.sf.bd.BD;
 import com.sf.dao.MovimentacaoBancariaDAO;
 import com.sf.paineis.PainelListarClassificacao;
 import com.sf.paineis.PainelListarContas;
@@ -42,12 +44,23 @@ public class TelaPrincipal extends JFrame {
 	private static final Color COR_MENU = new Color(140, 140, 140);
 	public static final Color COR_HOVER = new Color(180, 180, 180);
 	public static final Color COR_CONTEUDO = new Color(180, 180, 180);
-	MovimentacaoBancariaDAO dao = new MovimentacaoBancariaDAO();
+	private MovimentacaoBancariaDAO dao = new MovimentacaoBancariaDAO();
 	public float entradas, saidas, saldo, previsoes;
-	DecimalFormat df = new DecimalFormat("#,##0.00");
+	private DecimalFormat df = new DecimalFormat("#,##0.00");
+	private BD bd = new BD();
 
 	public TelaPrincipal() {
 		super();
+		
+		if (!bd.getConnection()) {
+			JOptionPane.showMessageDialog(null, 
+				"Não foi possível conectar ao banco de dados.\nVerifique sua conexão e tente novamente.",
+		        "Erro de Conexão",
+		         JOptionPane.ERROR_MESSAGE);
+			System.exit(1);
+		}
+		bd.close();
+		
 		setTitle("Sistema Financeiro");
 		setSize(1280, 720);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -57,6 +70,9 @@ public class TelaPrincipal extends JFrame {
 		criarEventos();
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		contentPane = getContentPane();
 		painelMenu = new JPanel();
@@ -118,7 +134,7 @@ public class TelaPrincipal extends JFrame {
 		painelDashboard = new JPanel();
 		painelDashboard.setBackground(COR_CONTEUDO);
 		painelDashboard.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
-		painelDashboard.setBorder(new EmptyBorder(120, 0, 0, 0));
+		painelDashboard.setBorder(new EmptyBorder(70, 0, 0, 0));
 		
 		//Buscando Valores do DASHBOARD
 		entradas = dao.buscarValores("C");
@@ -131,12 +147,34 @@ public class TelaPrincipal extends JFrame {
 		painelDashboard.add(criarCard("PREVISÃO MENSAL", "R$ " + df.format(previsoes)));
 		painelDashboard.add(criarCard("SALDO TOTAL", "R$ " + df.format(saldo)));
 
-		painelConteudo.add(jlTitulo);
-		painelConteudo.add(painelDashboard);
+		// Painel que junta título + dashboard
+		JPanel painelCompletoDashboard = new JPanel();
+		painelCompletoDashboard.setLayout(new BorderLayout());
+		painelCompletoDashboard.setBackground(COR_CONTEUDO);
 
-		jlTitulo.setBounds(30, 25, 500, 30);
+		// Painel para o título
+		JPanel painelTitulo = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		painelTitulo.setBackground(COR_CONTEUDO);
+		painelTitulo.setBorder(new EmptyBorder(20, 30, 0, 0));
+		jlTitulo = new JLabel("DASHBOARD");
+		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
+		jlTitulo.setForeground(Color.WHITE);
+		painelTitulo.add(jlTitulo);
+
+		painelCompletoDashboard.add(painelTitulo, BorderLayout.NORTH);
+		painelCompletoDashboard.add(painelDashboard, BorderLayout.CENTER);
+
+		// Salva como painel principal do Dashboard
+		painelDashboard = painelCompletoDashboard;
+
+		painelConteudo.add(painelDashboard, BorderLayout.CENTER);
 	}
 
+	/**
+	 * Método que cria um botão do menu lateral da tela
+	 * @param nome - o texto presente no botão
+	 * @return - o botao a ser adicionado no menu
+	 */
 	private JButton criarBotaoMenu(String nome) {
 		JButton botao = new JButton(nome);
 
@@ -180,6 +218,11 @@ public class TelaPrincipal extends JFrame {
 		return botao;
 	}
 
+	/**
+	 * Cria um botão a ser adicionado a um submenu do menu
+	 * @param nome - o texto presente no botao
+	 * @return - o botao a ser adicionado no submenu
+	 */
 	private JButton criarBotaoSubmenu(String nome) {
 		JButton botao = new JButton(nome);
 		botao.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -228,6 +271,9 @@ public class TelaPrincipal extends JFrame {
 		return botao;
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbDashboard.addActionListener(new ActionListener() {
 
@@ -302,6 +348,10 @@ public class TelaPrincipal extends JFrame {
 		});
 	}
 
+	/**
+	 * Método padrão para trocar entre os paineis da aplicacao
+	 * @param painelNovo - painel a ser colocado
+	 */
 	public void trocarPainel(JPanel painelNovo) {
 		painelConteudo.removeAll();
 		painelConteudo.add(painelNovo);
@@ -309,6 +359,12 @@ public class TelaPrincipal extends JFrame {
 		painelConteudo.repaint();
 	}
 
+	/**
+	 * Método que cria os cards presentes no dashboard
+	 * @param titulo - texto que fica em cima no card
+	 * @param valor - o valor que fica em baixo no card
+	 * @return - o card a ser adicionado no dashboard
+	 */
 	private JPanel criarCard(String titulo, String valor) {
 		JPanel card = new JPanel();
 		card.setBackground(new Color(13, 33, 79));

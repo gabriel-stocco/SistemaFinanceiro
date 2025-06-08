@@ -55,12 +55,19 @@ public class PainelCadastroFornecedor extends JPanel {
 		}
 	}
 
+	/**
+	 * Preenche os campos caso esteja editando algum fornecedor
+	 * @param conta - fornecedor a ser editada
+	 */
 	private void preencherCampos(Fornecedor fornecedor) {
 		fieldEmail.setText(fornecedor.getEmailForn());
 		fieldCnpj.setText(fornecedor.getCnjpForn());
 		fieldLogradouro.setText(fornecedor.getEnderecoForn());
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("ADICIONAR FORNECEDOR");
@@ -113,6 +120,9 @@ public class PainelCadastroFornecedor extends JPanel {
 		jbCancelar.setBounds(620, 320, 150, 50);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbCadastrar.addActionListener(new ActionListener() {
 

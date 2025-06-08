@@ -41,6 +41,12 @@ public class FloatingLabelComboBox<T> extends JPanel {
 		setComponentZOrder(label, 0);
 	}
 
+	/**
+	 * Método responsavel por setar as opcoes presentes no combobox
+	 * @param options - lista com as opções do combobox
+	 * @param labelMapper - mapeador para as labels da lista
+	 * @param valueMapper - mapeador dos values da lista
+	 */
 	public void setOptions(List<T> options, Function<T, String> labelMapper, Function<T, ?> valueMapper) {
 		comboBox.removeAllItems();
 
@@ -51,22 +57,38 @@ public class FloatingLabelComboBox<T> extends JPanel {
 		}
 	}
 
+	/**
+	 * Método para buscar o item selecionado do combobox
+	 * @return - item selecionado no combobox
+	 */
 	public T getSelectedItem() {
 		@SuppressWarnings("unchecked")
 		ItemWrapper<T> selected = (ItemWrapper<T>) comboBox.getSelectedItem();
 		return selected != null ? selected.getItem() : null;
 	}
 
+	/**
+	 * Método para buscar o value do item selecionado
+	 * @return - valor do item selecionado
+	 */
 	public Object getSelectedValue() {
 		@SuppressWarnings("unchecked")
 		ItemWrapper<T> selected = (ItemWrapper<T>) comboBox.getSelectedItem();
 		return selected != null ? selected.getValue() : null;
 	}
 
+	/**
+	 * Verifica se o combobox está vazio
+	 * @return - true caso esteja vazio e false caso não esteja
+	 */
 	public boolean isEmpty() {
 		return getSelectedItem() == null;
 	}
 
+	/**
+	 * Método usado para alterar algum item do combobox
+	 * @param item - item a ser alterado
+	 */
 	public void setSelectedItem(T item) {
 		for (int i = 0; i < comboBox.getItemCount(); i++) {
 			ItemWrapper<T> wrapper = comboBox.getItemAt(i);
@@ -78,9 +100,13 @@ public class FloatingLabelComboBox<T> extends JPanel {
 		comboBox.setSelectedIndex(0);
 	}
 	
+	/**
+	 * Adiciona um asteristico vermelho se o campo for obrigatório
+	 * @param texto - texto a ser adicionado o asteristico
+	 * @return - texto com o asteristico
+	 */
 	private String formatarTextoLabel(String texto) {
 		if (required) {
-			// HTML necessário para aplicar cor ao asterisco
 			return "<html>" + texto + " <font color='#cc0000'>*</font></html>";
 		}
 		return texto;

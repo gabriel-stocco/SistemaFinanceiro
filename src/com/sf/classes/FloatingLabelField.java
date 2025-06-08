@@ -55,6 +55,11 @@ public class FloatingLabelField extends JPanel {
 		setComponentZOrder(label, 0);
 	}
 
+	/**
+	 * Método responsavél por criar um campo com mascara se necessário
+	 * @param mask - mascára a ser inserida no campo
+	 * @return - o campo com a mascára adicionada
+	 */
 	private JFormattedTextField createField(String mask) {
 		try {
 			if (mask != null && !mask.isEmpty()) {
@@ -68,22 +73,38 @@ public class FloatingLabelField extends JPanel {
 		return new JFormattedTextField();
 	}
 	
+	/**
+	 * Adiciona um asteristico vermelho se o campo for obrigatório
+	 * @param texto - texto a ser adicionado o asteristico
+	 * @return - texto com o asteristico
+	 */
 	private String formatarTextoLabel(String texto) {
 		if (required) {
-			// HTML necessário para aplicar cor ao asterisco
 			return "<html>" + texto + " <font color='#cc0000'>*</font></html>";
 		}
 		return texto;
 	}
 
+	/**
+	 * Método para pegar o valor do campo
+	 * @return - o valor do campo em String
+	 */
 	public String getText() {
 		return field.getText();
 	}
 
+	/**
+	 * Método que coloca algum valor dentro do campo
+	 * @param texto - texto a ser colocado no campo
+	 */
 	public void setText(String texto) {
 		field.setText(texto);
 	}
 
+	/**
+	 * Verifica se o campo está vazio
+	 * @return - true se estiver vazio e false se não estiver
+	 */
 	public boolean isEmpty() {
 		return getText().replaceAll("[^\\d]", "").isEmpty();
 	}

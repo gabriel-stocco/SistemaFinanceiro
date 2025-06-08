@@ -55,12 +55,19 @@ public class PainelCadastroEmpresa extends JPanel {
 		}
 	}
 
+	/**
+	 * Preenche os campos caso esteja editando alguma empresa
+	 * @param empresa - empresa a ser editada
+	 */
 	private void preencherCampos(Empresa empresa) {
 		fieldNome.setText(empresa.getNome_Emp());
 		fieldCnpj.setText(empresa.getCnpj_Emp());
 		fieldLogradouro.setText(empresa.getEndereco_Emp());
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("ADICIONAR EMPRESA");
@@ -113,6 +120,9 @@ public class PainelCadastroEmpresa extends JPanel {
 		jbCancelar.setBounds(620, 320, 150, 50);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbCadastrar.addActionListener(new ActionListener() {
 

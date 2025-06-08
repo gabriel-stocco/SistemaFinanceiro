@@ -12,6 +12,11 @@ import com.sf.model.MovimentacaoBancaria;
 // Classe para importar o OFX
 public class OFXImport {
 
+	/**
+	 * Método que pega as informações presentes em um arquivo OFX e faz uma lista com as informações
+	 * @param arquivo - arquivo OFX com as informações
+	 * @return - lista com as informações do arquivo
+	 */
 	public List<MovimentacaoBancaria> importarOFX(File arquivo) {
 		List<MovimentacaoBancaria> movimentacoes = new ArrayList<>();
 		

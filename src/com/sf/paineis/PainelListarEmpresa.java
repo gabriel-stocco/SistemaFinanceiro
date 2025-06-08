@@ -40,6 +40,9 @@ public class PainelListarEmpresa extends JPanel {
 		criarEventos();
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("LISTAR EMPRESAS");
@@ -98,11 +101,17 @@ public class PainelListarEmpresa extends JPanel {
 		carregarDadosTabela();
 	}
 
+	/**
+	 * Método responsável por carregar os dados da tabela
+	 */
 	private void carregarDadosTabela() {
 		List<Empresa> empresasAtualizadas = dao.listar();
 		tabela.atualizarDados(empresasAtualizadas);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbAdicionar.addActionListener(new ActionListener() {
 

@@ -45,6 +45,9 @@ public class PainelTitulo extends JPanel {
 		criarEventos();
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("TÍTULOS");
@@ -73,6 +76,9 @@ public class PainelTitulo extends JPanel {
 		jbAdicionar.setBounds(530, 350, 400, 120);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbTransferir.addActionListener(new ActionListener() {
 
@@ -125,7 +131,7 @@ public class PainelTitulo extends JPanel {
 					
 					try {
 			            for (MovimentacaoBancaria mov : lista) { 
-			            	dao.salvar(mov);
+			            	dao.salvar(mov, false);
 			            }
 			            JOptionPane.showMessageDialog(null, "As informações do arquivo foram salvas");
 					} catch(Exception ex) {
@@ -138,6 +144,11 @@ public class PainelTitulo extends JPanel {
 
 	}
 
+	/**
+	 * Método que cria os botoes no painel para ficarem todos iguais
+	 * @param titulo - texto presente no botão
+	 * @return - o botão a ser adicionado no painel
+	 */
 	private JButton criarBotao(String titulo) {
 		JButton card = new JButton();
 		card.setBackground(new Color(0, 100, 0));

@@ -68,6 +68,10 @@ public class PainelCadastroConta extends JPanel {
 		}
 	}
 
+	/**
+	 * Preenche os campos caso esteja editando alguma conta
+	 * @param conta - conta a ser editada
+	 */
 	private void preencherCampos(ContaBancaria conta) {
 		fieldAgencia.setText(conta.getAgencia());
 		fieldNumeroConta.setText(conta.getNumeroConta());
@@ -88,6 +92,9 @@ public class PainelCadastroConta extends JPanel {
 		}
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("ADICIONAR CONTA BANCÁRIA");
@@ -154,6 +161,9 @@ public class PainelCadastroConta extends JPanel {
 		jbCancelar.setBounds(620, 320, 150, 50);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbCadastrar.addActionListener(new ActionListener() {
 

@@ -55,10 +55,17 @@ public class PainelCadastroClassificacao extends JPanel {
 		}
 	}
 
+	/**
+	 * Preenche os campos caso esteja editando alguma classificacao
+	 * @param classificacao - classificacao a ser editada
+	 */
 	private void preencherCampos(Classificacao classificacao) {
 		fieldNome.setText(classificacao.getNomClassificacao());
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("ADICIONAR CLASSIFICAÇÃO");
@@ -105,6 +112,9 @@ public class PainelCadastroClassificacao extends JPanel {
 		jbCancelar.setBounds(620, 200, 150, 50);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbCadastrar.addActionListener(new ActionListener() {
 			String nome;

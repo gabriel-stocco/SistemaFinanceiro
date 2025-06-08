@@ -63,10 +63,17 @@ public class PainelCadastroClassificar extends JPanel {
 		}
 	}
 
+	/**
+	 * Preenche os campos da movimentacao a ser classificada
+	 * @param movimentacao - movimentacao a ser classificada
+	 */
 	private void preencherCampos(MovimentacaoBancaria movimentacao) {
 		fieldDesc.setText(movimentacao.getDescMov());
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel();
@@ -121,6 +128,9 @@ public class PainelCadastroClassificar extends JPanel {
 		jbCancelar.setBounds(590, 200, 150, 50);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbCadastrar.addActionListener(new ActionListener() {
 			String desc;

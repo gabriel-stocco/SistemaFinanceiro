@@ -40,6 +40,9 @@ public class PainelListarContas extends JPanel {
 		criarEventos();
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("LISTAR CONTAS BANCÁRIAS");
@@ -71,7 +74,7 @@ public class PainelListarContas extends JPanel {
 
 		Consumer<ContaBancaria> minhaAcaoExcluir = (conta) -> {
 			int confirm = JOptionPane.showConfirmDialog(this,
-					"Tem certeza que deseja excluir: " + conta.getNomeEmpresa() + "?", "Confirmação de Exclusão",
+					"Tem certeza que deseja excluir a conta de: " + conta.getNomeEmpresa() + "?", "Confirmação de Exclusão",
 					JOptionPane.YES_NO_OPTION);
 			if (confirm == JOptionPane.YES_OPTION) {
 				String res = dao.excluir(conta.getIdConta());
@@ -99,11 +102,17 @@ public class PainelListarContas extends JPanel {
 		carregarDadosTabela();
 	}
 
+	/**
+	 * Método responsável por carregar os dados da tabela
+	 */
 	private void carregarDadosTabela() {
 		List<ContaBancaria> contasAtualizadas = dao.listarComEmpresa();
 		tabela.atualizarDados(contasAtualizadas);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbAdicionar.addActionListener(new ActionListener() {
 

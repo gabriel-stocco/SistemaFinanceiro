@@ -150,9 +150,9 @@ public class ContaDAO {
 			bd.st = bd.con.prepareStatement(sql);
 			bd.st.setInt(1, codigo);
 			if (bd.st.executeUpdate() == 1) {
-				men = "Classificação excluida com sucesso!";
+				men = "Conta excluida com sucesso!";
 			} else {
-				men = "Classificação não encontrada!";
+				men = "Conta não encontrada!";
 			}
 		} catch (SQLException erro) {
 			men = "Falha: " + erro.toString();

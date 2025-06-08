@@ -103,6 +103,21 @@ public class FornecedorDAO {
 	 * @return - uma mensagem informando o ocorrido
 	 */
 	public String excluir(int codigo) {
+		sql = "update MovimentacaoBancaria set Id_Forn = NULL WHERE Id_Forn = ?";
+		try {
+			bd.getConnection();
+			bd.st = bd.con.prepareStatement(sql);
+			bd.st.setInt(1, codigo);
+			if (bd.st.executeUpdate() == 1) {
+				men = "Conta excluida com sucesso!";
+			} else {
+				men = "Conta não encontrada!";
+			}
+		} catch (SQLException erro) {
+			men = "Falha: " + erro.toString();
+		} finally {
+			bd.close();
+		}
 		sql = "delete from Fornecedor where ID_Forn = ?";
 		try {
 			bd.getConnection();

@@ -40,6 +40,9 @@ public class PainelListarClassificacao extends JPanel {
 		criarEventos();
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("LISTAR CLASSIFICAÇÕES");
@@ -97,11 +100,17 @@ public class PainelListarClassificacao extends JPanel {
 		carregarDadosTabela();
 	}
 
+	/**
+	 * Método responsável por carregar os dados da tabela
+	 */
 	private void carregarDadosTabela() {
 		List<Classificacao> classificacoesAtualizadas = dao.listar();
 		tabela.atualizarDados(classificacoesAtualizadas);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbAdicionar.addActionListener(new ActionListener() {
 

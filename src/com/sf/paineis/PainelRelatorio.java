@@ -21,10 +21,12 @@ public class PainelRelatorio extends JPanel {
     public PainelRelatorio() {
         super(new BorderLayout());
         setBackground(TelaPrincipal.COR_CONTEUDO);
-
         iniciarComponentes();
     }
 
+    /**
+	 * Método onde inicializa os componentes do painel
+	 */
     private void iniciarComponentes() {
         // ----- TÍTULO NO TOPO -----
         JPanel painelTitulo = new JPanel(new FlowLayout(FlowLayout.LEFT));

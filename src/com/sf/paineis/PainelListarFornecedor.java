@@ -40,6 +40,9 @@ public class PainelListarFornecedor extends JPanel {
 		criarEventos();
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("LISTAR FORNECEDORES");
@@ -70,7 +73,7 @@ public class PainelListarFornecedor extends JPanel {
 
 		Consumer<Fornecedor> minhaAcaoExcluir = (fornecedor) -> {
 			int confirm = JOptionPane.showConfirmDialog(this,
-					"Tem certeza que deseja excluir: " + fornecedor.getCnjpForn() + "?", "Confirmação de Exclusão",
+					"Tem certeza que deseja excluir: " + fornecedor.getEmailForn() + "?", "Confirmação de Exclusão",
 					JOptionPane.YES_NO_OPTION);
 			if (confirm == JOptionPane.YES_OPTION) {
 				String res = dao.excluir(fornecedor.getIdFornecedor());
@@ -98,11 +101,17 @@ public class PainelListarFornecedor extends JPanel {
 		carregarDadosTabela();
 	}
 
+	/**
+	 * Método responsável por carregar os dados da tabela
+	 */
 	private void carregarDadosTabela() {
 		List<Fornecedor> fornecedoresAtualizados = dao.listar();
 		tabela.atualizarDados(fornecedoresAtualizados);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbAdicionar.addActionListener(new ActionListener() {
 

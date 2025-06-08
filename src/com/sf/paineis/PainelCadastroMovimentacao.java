@@ -78,6 +78,10 @@ public class PainelCadastroMovimentacao extends JPanel {
 		}
 	}
 
+	/**
+	 * Preenche os campos caso esteja editando alguma movimentacao
+	 * @param movimentacao - movimentacao a ser editada
+	 */
 	private void preencherCampos(MovimentacaoBancaria movimentacao) {
 		fieldDesc.setText(movimentacao.getDescMov());
 		fieldValor.setText(Float.toString(movimentacao.getValorMov()));
@@ -112,6 +116,9 @@ public class PainelCadastroMovimentacao extends JPanel {
 		}
 	}
 
+	/**
+	 * Método onde inicializa os componentes do painel
+	 */
 	private void iniciarComponentes() {
 		// Título do Painel
 		jlTitulo = new JLabel("ADICIONAR PREVISÃO");
@@ -135,7 +142,7 @@ public class PainelCadastroMovimentacao extends JPanel {
 		// Select de conta bancaria
 		contas = contaDAO.listarComEmpresa();
 		comboConta = new FloatingLabelComboBox<>("Conta Bancaria", 430, true);
-		comboConta.setOptions(contas, ContaBancaria::getNomeEmpresa, ContaBancaria::getIdConta);
+		comboConta.setOptions(contas, c -> c.getNomeEmpresa() + " - " + c.getNumeroConta(), ContaBancaria::getIdConta);
 
 		// Select de fornecedores
 		fornecedores = fornDAO.listar();
@@ -190,6 +197,9 @@ public class PainelCadastroMovimentacao extends JPanel {
 		jbCancelar.setBounds(620, 420, 150, 50);
 	}
 
+	/**
+	 * Método onde estão os eventos presentes no painel
+	 */
 	private void criarEventos() {
 		jbCadastrar.addActionListener(new ActionListener() {
 
@@ -219,7 +229,7 @@ public class PainelCadastroMovimentacao extends JPanel {
 						if (movimentacao == null) {
 							movimentacao = new MovimentacaoBancaria(desc, valor, tipo, dataSQL, idClassificacao,
 									idConta, idFornecedor);
-							String res = dao.salvar(movimentacao);
+							String res = dao.salvar(movimentacao, true);
 							JOptionPane.showMessageDialog(null, res, "Sistema Financeiro",
 									JOptionPane.INFORMATION_MESSAGE);
 						} else {

@@ -92,10 +92,11 @@ public class MovimentacaoBancariaDAO {
 	/**
 	 * Realiza a gravação de uma movimentação no banco de dados
 	 * 
-	 * @param f - a movimentação a ser salva
+	 * @param m - a movimentação a ser salva
+	 * @param prev - se é uma previsão ou uma movimentacao
 	 * @return - uma mensagem informando o ocorrido
 	 */
-	public String salvar(MovimentacaoBancaria m) {
+	public String salvar(MovimentacaoBancaria m, boolean prev) {
 		sql = "insert into MovimentacaoBancaria values (?,?,?,?,?,?,?)";
 		try {
 			bd.getConnection();
@@ -108,7 +109,11 @@ public class MovimentacaoBancariaDAO {
 			bd.st.setObject(6, m.getIdConta());
 			bd.st.setObject(7, m.getIdFornecedor());
 			bd.st.executeUpdate();
-			men = "Previsão inserida com sucesso!";
+			if(prev) {
+				men = "Previsão inserida com sucesso!";
+			} else {
+				men = "Movimentação inserida com sucesso";
+			}
 		} catch (SQLException erro) {
 			men = "Falha: " + erro.toString();
 		} finally {
@@ -120,7 +125,7 @@ public class MovimentacaoBancariaDAO {
 	/**
 	 * Realiza a atualização de uma movimentação no banco de dados
 	 * 
-	 * @param f - a movimentação a ser salva
+	 * @param m - a movimentação a ser salva
 	 * @return - uma mensagem informando o ocorrido
 	 */
 	public String atualizar(MovimentacaoBancaria m) {

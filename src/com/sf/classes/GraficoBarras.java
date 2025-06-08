@@ -15,25 +15,32 @@ public class GraficoBarras extends JPanel {
     DecimalFormat df = new DecimalFormat("#,##0.00");
 
     private final Color[] cores = {
-        new Color(255, 99, 132),
-        new Color(54, 162, 235),
-        new Color(255, 206, 86),
-        new Color(75, 192, 192),
-        new Color(153, 102, 255),
-        new Color(255, 159, 64),
-        new Color(100, 200, 100),
-        new Color(200, 100, 200)
+        new Color(230, 80, 80),
+        new Color(40, 120, 200),
+        new Color(220, 160, 60),
+        new Color(30, 150, 150),
+        new Color(120, 90, 200),
+        new Color(200, 110, 30),
+        new Color(60, 170, 60),
+        new Color(160, 60, 160)
     };
 
     public GraficoBarras() {
         setBackground(new Color(210, 210, 210));
     }
 
+    /**
+     * Método que vai setar os dados presentes no gráfico
+     * @param dados - Lista com os dados contendo a legenda e valor de cada um
+     */
     public void setDados(List<DadosGrafico> dados) {
         this.dados = dados;
         repaint();
     }
 
+    /**
+     * Método que vai desenhar o gráfico
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -84,7 +91,7 @@ public class GraficoBarras extends JPanel {
     
     @Override
     public Dimension getPreferredSize() {
-        return new Dimension(800, 450);
+        return new Dimension(850, 480);
     }
 
 }
