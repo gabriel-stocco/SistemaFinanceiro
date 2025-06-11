@@ -36,10 +36,9 @@ import com.sf.paineis.PainelTitulo;
 
 @SuppressWarnings("serial")
 public class TelaPrincipal extends JFrame {
-	private JPanel painelConteudo, painelMenu, submenuCadastros, painelDashboard;
+	private JPanel painelConteudo, painelMenu, submenuCadastros, painelDashboardCompleto;
 	private JLabel menuLabel = new JLabel("MENU"), jlTitulo;
-	private JButton jbDashboard, jbCadastro, jbClassificacao, jbConta, jbEmpresa, jbFornecedor, jbTitulo,
-			jbRelatorio;
+	private JButton jbDashboard, jbCadastro, jbClassificacao, jbConta, jbEmpresa, jbFornecedor, jbTitulo, jbRelatorio;
 	private Container contentPane;
 	private static final Color COR_MENU = new Color(140, 140, 140);
 	public static final Color COR_HOVER = new Color(180, 180, 180);
@@ -49,18 +48,19 @@ public class TelaPrincipal extends JFrame {
 	private DecimalFormat df = new DecimalFormat("#,##0.00");
 	private BD bd = new BD();
 
+	private JPanel painelCardsDashboard;
+
 	public TelaPrincipal() {
 		super();
-		
+
 		if (!bd.getConnection()) {
-			JOptionPane.showMessageDialog(null, 
-				"Não foi possível conectar ao banco de dados.\nVerifique sua conexão e tente novamente.",
-		        "Erro de Conexão",
-		         JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null,
+					"Não foi possível conectar ao banco de dados.\nVerifique sua conexão e tente novamente.",
+					"Erro de Conexão", JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
 		}
 		bd.close();
-		
+
 		setTitle("Sistema Financeiro");
 		setSize(1280, 720);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -68,6 +68,7 @@ public class TelaPrincipal extends JFrame {
 		setResizable(false);
 		iniciarComponentes();
 		criarEventos();
+		atualizarDashboard();
 	}
 
 	/**
@@ -125,55 +126,58 @@ public class TelaPrincipal extends JFrame {
 		painelConteudo.setLayout(new BorderLayout());
 		contentPane.add(painelConteudo, BorderLayout.CENTER);
 
-		// Painel de Dashboard
+		// Configuração do painel completo do Dashboard
+		painelDashboardCompleto = new JPanel();
+		painelDashboardCompleto.setLayout(new BorderLayout());
+		painelDashboardCompleto.setBackground(COR_CONTEUDO);
+
+		// Painel para o título do Dashboard
+		JPanel painelTituloDashboard = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		painelTituloDashboard.setBackground(COR_CONTEUDO);
+		painelTituloDashboard.setBorder(new EmptyBorder(20, 30, 0, 0));
 		jlTitulo = new JLabel("DASHBOARD");
 		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
 		jlTitulo.setForeground(Color.WHITE);
-		jlTitulo.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		painelDashboard = new JPanel();
-		painelDashboard.setBackground(COR_CONTEUDO);
-		painelDashboard.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
-		painelDashboard.setBorder(new EmptyBorder(70, 0, 0, 0));
-		
-		//Buscando Valores do DASHBOARD
+		painelTituloDashboard.add(jlTitulo);
+
+		// Painel específico para os cards do Dashboard (este será limpo e atualizado)
+		painelCardsDashboard = new JPanel();
+		painelCardsDashboard.setBackground(COR_CONTEUDO);
+		painelCardsDashboard.setLayout(new FlowLayout(FlowLayout.CENTER, 30, 30));
+		painelCardsDashboard.setBorder(new EmptyBorder(70, 0, 0, 0));
+
+		painelDashboardCompleto.add(painelTituloDashboard, BorderLayout.NORTH);
+		painelDashboardCompleto.add(painelCardsDashboard, BorderLayout.CENTER);
+
+		painelConteudo.add(painelDashboardCompleto, BorderLayout.CENTER);
+	}
+
+	/**
+	 * Atualiza o dashboard com os dados mais recentes. Este método busca os valores
+	 * mais recentes do DAO e recria os cards do dashboard.
+	 */
+	private void atualizarDashboard() {
+		painelCardsDashboard.removeAll();
+
 		entradas = dao.buscarValores("C");
 		saidas = dao.buscarValores("D");
 		previsoes = dao.buscarPrevisoes();
 		saldo = dao.buscarSaldo();
 
-		painelDashboard.add(criarCard("SAÍDAS TOTAIS", "R$ " + df.format(saidas)));
-		painelDashboard.add(criarCard("ENTRADAS TOTAIS", "R$ " + df.format(entradas)));
-		painelDashboard.add(criarCard("PREVISÃO MENSAL", "R$ " + df.format(previsoes)));
-		painelDashboard.add(criarCard("SALDO TOTAL", "R$ " + df.format(saldo)));
+		painelCardsDashboard.add(criarCard("SAÍDAS TOTAIS", "R$ " + df.format(saidas)));
+		painelCardsDashboard.add(criarCard("ENTRADAS TOTAIS", "R$ " + df.format(entradas)));
+		painelCardsDashboard.add(criarCard("PREVISÃO MENSAL", "R$ " + df.format(previsoes)));
+		painelCardsDashboard.add(criarCard("SALDO TOTAL", "R$ " + df.format(saldo)));
 
-		// Painel que junta título + dashboard
-		JPanel painelCompletoDashboard = new JPanel();
-		painelCompletoDashboard.setLayout(new BorderLayout());
-		painelCompletoDashboard.setBackground(COR_CONTEUDO);
-
-		// Painel para o título
-		JPanel painelTitulo = new JPanel(new FlowLayout(FlowLayout.LEFT));
-		painelTitulo.setBackground(COR_CONTEUDO);
-		painelTitulo.setBorder(new EmptyBorder(20, 30, 0, 0));
-		jlTitulo = new JLabel("DASHBOARD");
-		jlTitulo.setFont(new Font("Segoe UI", Font.BOLD, 26));
-		jlTitulo.setForeground(Color.WHITE);
-		painelTitulo.add(jlTitulo);
-
-		painelCompletoDashboard.add(painelTitulo, BorderLayout.NORTH);
-		painelCompletoDashboard.add(painelDashboard, BorderLayout.CENTER);
-
-		// Salva como painel principal do Dashboard
-		painelDashboard = painelCompletoDashboard;
-
-		painelConteudo.add(painelDashboard, BorderLayout.CENTER);
+		painelCardsDashboard.revalidate();
+		painelCardsDashboard.repaint();
 	}
 
 	/**
-	 * Método que cria um botão do menu lateral da tela
-	 * @param nome - o texto presente no botão
-	 * @return - o botao a ser adicionado no menu
+	 * Método que cria um botão para o menu lateral da tela
+	 * 
+	 * @param nome - o texto a ser exibido no botão
+	 * @return - o botão configurado para o menu
 	 */
 	private JButton criarBotaoMenu(String nome) {
 		JButton botao = new JButton(nome);
@@ -194,6 +198,7 @@ public class TelaPrincipal extends JFrame {
 
 			@Override
 			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
 			}
 
 			@Override
@@ -208,10 +213,12 @@ public class TelaPrincipal extends JFrame {
 
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
 			}
 
 			@Override
 			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
 			}
 		});
 
@@ -219,9 +226,10 @@ public class TelaPrincipal extends JFrame {
 	}
 
 	/**
-	 * Cria um botão a ser adicionado a um submenu do menu
-	 * @param nome - o texto presente no botao
-	 * @return - o botao a ser adicionado no submenu
+	 * Cria um botão a ser adicionado a um submenu do menu principal
+	 * 
+	 * @param nome - o texto a ser exibido no botão
+	 * @return - o botão configurado para o submenu
 	 */
 	private JButton criarBotaoSubmenu(String nome) {
 		JButton botao = new JButton(nome);
@@ -242,13 +250,13 @@ public class TelaPrincipal extends JFrame {
 			@Override
 			public void mouseReleased(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
 
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
 
 			@Override
@@ -264,7 +272,7 @@ public class TelaPrincipal extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// TODO Auto-generated method stub
-
+				
 			}
 		});
 
@@ -272,14 +280,15 @@ public class TelaPrincipal extends JFrame {
 	}
 
 	/**
-	 * Método onde estão os eventos presentes no painel
+	 * Método onde estão configurados os eventos dos botões do painel
 	 */
 	private void criarEventos() {
 		jbDashboard.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				trocarPainel(painelDashboard);
+				atualizarDashboard();
+				trocarPainel(painelDashboardCompleto);
 			}
 		});
 
@@ -349,8 +358,10 @@ public class TelaPrincipal extends JFrame {
 	}
 
 	/**
-	 * Método padrão para trocar entre os paineis da aplicacao
-	 * @param painelNovo - painel a ser colocado
+	 * Método padrão para trocar entre os painéis da aplicação
+	 * 
+	 * @param painelNovo - o novo painel a ser exibido no painel de conteúdo
+	 *                   principal
 	 */
 	public void trocarPainel(JPanel painelNovo) {
 		painelConteudo.removeAll();
@@ -360,10 +371,11 @@ public class TelaPrincipal extends JFrame {
 	}
 
 	/**
-	 * Método que cria os cards presentes no dashboard
-	 * @param titulo - texto que fica em cima no card
-	 * @param valor - o valor que fica em baixo no card
-	 * @return - o card a ser adicionado no dashboard
+	 * Método que cria os cards exibidos no dashboard
+	 * 
+	 * @param titulo - o texto que fica na parte superior do card
+	 * @param valor  - o valor que fica na parte inferior do card
+	 * @return - o painel (card) configurado para ser adicionado ao dashboard
 	 */
 	private JPanel criarCard(String titulo, String valor) {
 		JPanel card = new JPanel();
@@ -389,5 +401,4 @@ public class TelaPrincipal extends JFrame {
 		card.add(painelTexto, BorderLayout.CENTER);
 		return card;
 	}
-
 }
